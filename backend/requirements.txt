@@ -1,0 +1,11 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+pydantic-settings==2.7.1
+PyMuPDF==1.25.2
+rank-bm25==0.2.2
+numpy==2.2.2
+faiss-cpu==1.9.0.post1
+google-genai==1.2.0
+langgraph==0.2.60
+pytest==8.3.4
