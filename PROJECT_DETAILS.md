@@ -11,7 +11,7 @@ The system is designed around evidence-grounded review:
 3. Text is extracted with PyMuPDF.
 4. Extracted text is divided into clause-aware chunks.
 5. Chunks are persisted as JSON.
-6. A local Sentence Transformers model creates 768-dimensional embeddings saved in a persistent local Chroma vector store.
+6. A local Sentence Transformers model creates configured 384-dimensional embeddings saved in a persistent local Chroma vector store.
 7. BM25 lexical retrieval and optional vector retrieval find relevant evidence.
 8. One bounded prompt analyzes the evidence and returns structured findings.
 9. Exact-quote validation filters unsupported model output.
@@ -33,8 +33,7 @@ This is an engineering prototype and is not legal advice.
 - `rank-bm25` for lexical retrieval
 - NumPy for vector storage and numerical operations
 - Chroma for persistent local vector similarity search
-- LangGraph for explicit review workflow control flow
-- Sentence Transformers with `sentence-transformers/all-mpnet-base-v2` for local 768-dimensional embeddings
+- Sentence Transformers with `sentence-transformers/multi-qa-MiniLM-L6-cos-v1` for local 384-dimensional embeddings
 - Google Gemini API and optional Ollama models for chat generation
 
 ### Frontend
@@ -71,6 +70,7 @@ Important fields include:
 - `page_count`
 - `chunk_count`
 - `processing_status`
+- `indexing_stage`, `indexing_progress`, and `indexing_error`
 - `embedding_status`
 - `analysis_status`
 
@@ -131,7 +131,7 @@ data/
 └── cache/
 ```
 
-The application creates all of these directories during startup. The active implementation writes PDFs, chunks, embeddings, indexes, and audit events. The other directories are reserved for future extracted-page, report, and cache artifacts.
+The application creates all of these directories during startup. The active implementation writes PDFs, chunks, embeddings, BM25 indexes, Chroma data, metadata, and audit events. The extracted, pages, reports, and cache directories are reserved for future use.
 
 ## 5. Workspace isolation
 
@@ -178,6 +178,10 @@ workspace hash + content hash
 
 The original filename and SHA-256 digest are retained in the contract metadata.
 
+### Duplicate upload reuse
+
+If an upload has the same workspace-scoped content hash and filename as a completed contract, and its chunk and embedding artifacts still exist, the API returns the existing metadata without repeating PDF extraction, chunking, or embedding. A same-named PDF with different content is indexed normally.
+
 ### Step 3: PDF text extraction
 
 PyMuPDF opens the PDF in memory and extracts page text.
@@ -223,11 +227,11 @@ data/chunks/<contract_id>.json
 All chunk texts are encoded locally with the configured Sentence Transformers model:
 
 ```text
-EMBEDDING_MODEL=sentence-transformers/all-mpnet-base-v2
-EMBEDDING_DIMENSION=768
+EMBEDDING_MODEL=sentence-transformers/multi-qa-MiniLM-L6-cos-v1
+EMBEDDING_DIMENSION=384
 ENABLE_LOCAL_EMBEDDINGS=true
-CHUNK_SIZE_CHARS=4200
-CHUNK_OVERLAP_CHARS=400
+CHUNK_SIZE_CHARS=900
+CHUNK_OVERLAP_CHARS=120
 ```
 
 The returned vectors are saved as float32 NumPy arrays:
@@ -273,7 +277,7 @@ When embeddings are present, chunk vectors are stored in a persistent local Chro
 data/chroma/
 ```
 
-Queries use the same local 768-dimensional embedding model. No Gemini or other network reranker is used.
+Queries use the same local 384-dimensional embedding model. No Gemini or other network reranker is used.
 
 ### Combining results
 
@@ -313,9 +317,13 @@ The backend:
 2. Runs retrieval separately for each selected contract.
 3. Combines the top evidence chunks.
 4. Labels evidence with the source filename.
-5. Uses Gemini for a structured answer when configured.
-6. Falls back to the first relevant evidence chunk when Gemini is unavailable.
-7. Saves both user and assistant messages in `workspace_messages`.
+5. Uses the selected Gemini or Ollama model for a structured, evidence-grounded answer when configured.
+6. Retries other currently available Google models if a selected Gemini model is unavailable or overloaded.
+7. Returns the provider error as HTTP 502 and records it in the audit log when generation fails.
+8. Uses a contract-grounded fallback checklist if generation returns an empty or generic refusal.
+9. Saves both user and assistant messages in `workspace_messages`.
+
+Chat prompts support normal questions, hypotheticals, and possible-breach scenarios. The lawyer prompt must identify the relevant obligation, state assumptions, distinguish possible risk from a confirmed legal conclusion, cite page and clause evidence, and recommend safer steps such as notice, consent, written approval, cure, and record preservation.
 
 ### Individual contract chat
 
@@ -334,6 +342,14 @@ X-Workspace-ID: <workspace-id>
 ```http
 GET /api/health
 ```
+
+### Available generation models
+
+```http
+GET /api/models
+```
+
+Returns currently discoverable Gemini and Ollama models plus the selected default. Provider discovery failures are ignored so one unavailable provider does not hide models from another.
 
 ### Contracts
 
@@ -423,8 +439,14 @@ Important settings:
 
 ```env
 GEMINI_API_KEY=
-EMBEDDING_MODEL=sentence-transformers/all-mpnet-base-v2
-EMBEDDING_DIMENSION=768
+GEMINI_MODEL=gemini-flash-lite-latest
+EMBEDDING_MODEL=sentence-transformers/multi-qa-MiniLM-L6-cos-v1
+EMBEDDING_DIMENSION=384
+EMBEDDING_BATCH_SIZE=32
+EMBEDDING_MAX_TOKENS=256
+ENABLE_LOCAL_EMBEDDINGS=true
+CHUNK_SIZE_CHARS=900
+CHUNK_OVERLAP_CHARS=120
 OLLAMA_BASE_URL=http://localhost:11434
 DATA_DIR=./data
 MAX_RETRIES=2
@@ -474,17 +496,20 @@ The repository also includes `start.cmd`, `start.ps1`, `stop.cmd`, and `stop.ps1
 ```text
 backend/app/
 ├── config.py          Settings and environment configuration
-├── gemini.py          Gemini generation and embedding client
+├── gemini.py          Gemini/Ollama model discovery and generation
+├── embeddings.py      Local Sentence Transformers embeddings
 ├── ingestion.py       PDF extraction and chunking
 ├── main.py            FastAPI routes
 ├── models.py          Pydantic request, response, and domain models
 ├── retrieval.py       BM25 + Chroma hybrid retrieval
 ├── security.py        Evidence and untrusted-content checks
-└── storage.py         SQLite and filesystem persistence
+├── storage.py         SQLite and filesystem persistence
+└── vector_store.py    Persistent Chroma collections
 
 frontend/src/
 ├── main.tsx           React application and API interactions
-└── style.css          Workspace UI styling
+├── style.css          Workspace UI styling and fixed-pane layout
+└── progress.css       Progress-state styling
 ```
 
 ## 14. Current limitations
@@ -493,9 +518,9 @@ frontend/src/
 - There is no authentication or per-user authorization layer.
 - Workspace IDs are generated by the browser session and passed in a request header; a production deployment should bind them to authenticated user and thread records on the server.
 - Gemini responses depend on API availability, model limits, and the configured data-handling terms.
-- The fallback chat response is intentionally simple when Gemini is unavailable.
+- The fallback chat response is a deterministic, contract-grounded checklist; it is not a substitute for model analysis or legal advice.
 - PDF extraction quality depends on whether the PDF contains selectable text. Scanned image PDFs need OCR support, which is not currently included.
-- The current specialist logic is a prototype and should be evaluated against a larger legal benchmark before production use.
+- Health scores are explainable heuristics, not legal conclusions. They deduct points for finding severity and for protection gaps identified in the indexed text.
 
 ## 15. Data flow summary
 
@@ -509,20 +534,19 @@ FastAPI upload
       ├── Local original PDF
       ├── PyMuPDF extraction
       ├── Clause-aware JSON chunks
-      ├── Optional Gemini embeddings
+      ├── Local Sentence Transformers embeddings
       ├── BM25 token index
       └── Persistent local Chroma vector store
 
 User review question
-      │
-      ▼
-Master Orchestrator
-      │
-      ├── Planner
-      ├── Parallel specialist agents
-      ├── Cross-clause analysis
-      ├── Evidence verifier
-      └── Judge / human review gate
+  │
+  ▼
+FastAPI review route
+  │
+  ├── Bounded contract-review prompt
+  ├── Structured model response
+  ├── Exact-quote evidence validation
+  └── Findings and explainable health summary
 
 Workspace chat question
       │

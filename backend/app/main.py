@@ -85,12 +85,15 @@ def review_summary(chunks, findings):
     gaps=[]
     for category,terms in (("Liability cap",("liability", "damages", "cap")),("Termination notice",("termination", "notice")),("Data-security obligations",("security", "breach", "personal data")),("Dispute resolution",("governing law", "jurisdiction", "arbitration"))):
         if not all(term in text for term in terms): gaps.append(f"Confirm {category.lower()} language is complete and commercially balanced.")
-    penalties={"CRITICAL":30,"HIGH":20,"MEDIUM":8,"LOW":2}
-    score=max(0,100-sum(penalties.get(f.severity.upper(),8) for f in findings))
+    penalties={"CRITICAL":35,"HIGH":25,"MEDIUM":12,"LOW":4}
+    finding_penalty=sum(penalties.get(f.severity.upper(),12) for f in findings)
+    gap_penalty=min(30,len(gaps)*6)
+    score=max(0,100-finding_penalty-gap_penalty)
     high=sum(1 for f in findings if f.severity.upper() in {"CRITICAL","HIGH"})
     medium=sum(1 for f in findings if f.severity.upper()=="MEDIUM")
-    rationale="No material findings were returned." if not findings else f"Score reduced for {high} critical/high-priority finding(s) and {medium} medium-priority finding(s); review the cited clauses before signing."
-    return {"score":score,"rationale":rationale,"strengths":strengths[:5],"gaps":gaps[:5],"finding_count":len(findings)}
+    rationale=(f"Score: 100 - {finding_penalty} finding-risk points - {gap_penalty} missing-protection points. "
+               f"Detected {high} critical/high finding(s), {medium} medium finding(s), and {len(gaps)} protection gap(s).")
+    return {"score":score,"rationale":rationale,"strengths":strengths[:5],"gaps":gaps[:5],"finding_count":len(findings),"finding_penalty":finding_penalty,"gap_penalty":gap_penalty}
 
 def fallback_chat_answer(question, hits):
     if not hits:
