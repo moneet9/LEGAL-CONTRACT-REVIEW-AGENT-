@@ -1,31 +1,35 @@
-import re, math, json
-from collections import Counter
+import re, json
 import numpy as np
-import faiss
 from rank_bm25 import BM25Okapi
 from .config import settings
+from .vector_store import search as vector_search
+
+
 class HybridRetriever:
-    def __init__(self,chunks,vectors=None,root=None,embed_query=None):
+    def __init__(self,chunks,vectors=None,root=None,embed_query=None,contract_id=None):
         self.chunks=chunks; self.root=root
         self.tokens=[re.findall(r"\w+",c.text.lower()) for c in chunks]
         self.bm25=BM25Okapi(self.tokens) if chunks else None
         if root and chunks: (root/"indexes"/f"{chunks[0].contract_id}.bm25.json").write_text(json.dumps(self.tokens),encoding="utf-8")
-        self.vectors=np.asarray(vectors,dtype="float32") if vectors is not None else None; self.embed_query=embed_query
-        self.index=None
-        if self.vectors is not None and len(self.vectors):
-            faiss.normalize_L2(self.vectors); self.index=faiss.IndexFlatIP(self.vectors.shape[1]); self.index.add(self.vectors)
-            if root: faiss.write_index(self.index,str(root/"indexes"/f"{chunks[0].contract_id}.faiss"))
+        self.vectors=vectors; self.embed_query=embed_query; self.contract_id=contract_id or (chunks[0].contract_id if chunks else "")
     def search(self,query,top_k=8):
         q=set(re.findall(r"\w+",query.lower())); lexical=[]
         if self.bm25:
             lexical=[int(x) for x in np.argsort(self.bm25.get_scores(list(q)))[::-1][:settings.top_k_bm25]]
         semantic=[]
-        if self.index is not None and self.embed_query:
-            v=np.asarray([self.embed_query(query)],dtype="float32"); faiss.normalize_L2(v); _,idx=self.index.search(v,min(settings.top_k_vector,len(self.chunks))); semantic=[int(x) for x in idx[0] if x>=0]
-        order=[]
-        for rank,idx in enumerate(lexical+semantic):
-            if idx not in order: order.append(idx)
-        return [self.chunks[i] for i in order[:top_k]] or self._fallback(q,top_k)
+        if self.embed_query and self.contract_id:
+            ids=vector_search(self.contract_id,self.embed_query(query),min(settings.top_k_vector,len(self.chunks)))
+            positions={chunk.chunk_id:index for index,chunk in enumerate(self.chunks)}
+            semantic=[positions[chunk_id] for chunk_id in ids if chunk_id in positions]
+        scores={}
+        for rank,index in enumerate(lexical): scores[index]=scores.get(index,0)+1/(60+rank)
+        for rank,index in enumerate(semantic): scores[index]=scores.get(index,0)+1/(60+rank)
+        for index,chunk in enumerate(self.chunks):
+            text=chunk.text.lower(); exact=sum(1 for token in q if len(token)>3 and token in text)
+            if chunk.clause and chunk.clause.lower() in query.lower(): scores[index]=scores.get(index,0)+0.12
+            scores[index]=scores.get(index,0)+min(exact,8)*0.005
+        order=sorted(scores,key=scores.get,reverse=True)
+        return [self.chunks[index] for index in order[:top_k]] or self._fallback(q,top_k)
     def _fallback(self,q,top_k):
         scored=[]
         for c in self.chunks:

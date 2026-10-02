@@ -5,7 +5,8 @@ pydantic-settings==2.7.1
 PyMuPDF==1.25.2
 rank-bm25==0.2.2
 numpy==2.2.2
-faiss-cpu==1.9.0.post1
 google-genai==1.2.0
-langgraph==0.2.60
+sentence-transformers==3.4.1
+httpx==0.28.1
+chromadb==0.6.3
 pytest==8.3.4

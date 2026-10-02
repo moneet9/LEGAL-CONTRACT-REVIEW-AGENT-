@@ -2,7 +2,7 @@
 
 ## 1. What the project does
 
-PS-9 is a local-first contract review workspace. Users can upload one or more PDF contracts, keep the original files, extract searchable evidence, generate embeddings, run a multi-agent review, and ask questions in a shared workspace chat.
+PS-9 is a local-first contract review workspace. Users can upload one or more PDF contracts, keep the original files, extract searchable evidence, generate embeddings, run a prompt-based review, and ask questions in a shared workspace chat.
 
 The system is designed around evidence-grounded review:
 
@@ -11,10 +11,10 @@ The system is designed around evidence-grounded review:
 3. Text is extracted with PyMuPDF.
 4. Extracted text is divided into clause-aware chunks.
 5. Chunks are persisted as JSON.
-6. Optional Gemini embeddings are saved as NumPy vectors and indexed with FAISS.
+6. A local Sentence Transformers model creates 768-dimensional embeddings saved in a persistent local Chroma vector store.
 7. BM25 lexical retrieval and optional vector retrieval find relevant evidence.
-8. Specialist agents analyze the evidence in parallel.
-9. A cross-clause step, evidence verifier, and judge produce the final review.
+8. One bounded prompt analyzes the evidence and returns structured findings.
+9. Exact-quote validation filters unsupported model output.
 10. Users can ask questions in a persistent workspace chat.
 
 This is an engineering prototype and is not legal advice.
@@ -32,9 +32,10 @@ This is an engineering prototype and is not legal advice.
 - PyMuPDF (`fitz`) for PDF text extraction
 - `rank-bm25` for lexical retrieval
 - NumPy for vector storage and numerical operations
-- FAISS CPU for vector similarity indexes
+- Chroma for persistent local vector similarity search
 - LangGraph for explicit review workflow control flow
-- Google Gemini API as an optional external model provider
+- Sentence Transformers with `sentence-transformers/all-mpnet-base-v2` for local 768-dimensional embeddings
+- Google Gemini API and optional Ollama models for chat generation
 
 ### Frontend
 
@@ -121,7 +122,7 @@ data/
 │   └── <contract_id>.npy
 ├── indexes/
 │   ├── <contract_id>.bm25.json
-│   └── <contract_id>.faiss
+│   └── <contract_id>.bm25.json
 ├── audit/
 │   └── events.jsonl
 ├── extracted/
@@ -211,7 +212,7 @@ Each chunk records:
 - source text
 - estimated token count
 
-Chunks are limited to approximately 4,200 characters before a new chunk is started. Chunk JSON is saved to:
+Chunks use `CHUNK_SIZE_CHARS` from `.env` and repeat the final `CHUNK_OVERLAP_CHARS` characters in the next chunk. Chunk JSON is saved to:
 
 ```text
 data/chunks/<contract_id>.json
@@ -219,10 +220,14 @@ data/chunks/<contract_id>.json
 
 ### Step 5: Embeddings
 
-If `GEMINI_API_KEY` is configured, all chunk texts are sent to the configured Gemini embedding model:
+All chunk texts are encoded locally with the configured Sentence Transformers model:
 
 ```text
-GEMINI_EMBEDDING_MODEL=gemini-embedding-2-preview
+EMBEDDING_MODEL=sentence-transformers/all-mpnet-base-v2
+EMBEDDING_DIMENSION=768
+ENABLE_LOCAL_EMBEDDINGS=true
+CHUNK_SIZE_CHARS=4200
+CHUNK_OVERLAP_CHARS=400
 ```
 
 The returned vectors are saved as float32 NumPy arrays:
@@ -231,15 +236,15 @@ The returned vectors are saved as float32 NumPy arrays:
 data/embeddings/<contract_id>.npy
 ```
 
-If Gemini is not configured, the contract remains usable with lexical retrieval and the metadata reports:
+The model is downloaded on first use and cached by Sentence Transformers. The metadata reports:
 
 ```text
-fallback_no_gemini_key
+local_saved
 ```
 
 ## 7. Retrieval and indexing
 
-The project uses hybrid retrieval.
+The project uses persistent local Chroma plus hybrid retrieval.
 
 ### BM25 lexical retrieval
 
@@ -260,25 +265,19 @@ BM25 is useful for exact legal language such as:
 - confidentiality
 - payment
 
-### FAISS vector retrieval
+### Chroma vector retrieval
 
-When embeddings are present:
-
-1. Chunk vectors are converted to float32.
-2. Vectors are L2-normalized.
-3. A FAISS `IndexFlatIP` index is created.
-4. The index is populated with normalized chunk vectors.
-5. The index is saved to:
+When embeddings are present, chunk vectors are stored in a persistent local Chroma collection under:
 
 ```text
-data/indexes/<contract_id>.faiss
+data/chroma/
 ```
 
-The query is embedded with Gemini, normalized, and compared using inner product, which acts as cosine similarity after normalization.
+Queries use the same local 768-dimensional embedding model. No Gemini or other network reranker is used.
 
 ### Combining results
 
-The retriever obtains lexical candidates and optional semantic candidates. Duplicate chunk indexes are removed while preserving ranking order. The final top-K chunks are returned.
+The retriever obtains BM25 exact-language candidates and Chroma semantic candidates, combines them with reciprocal-rank fusion, then applies a deterministic token-overlap and exact-clause boost. Duplicate chunk indexes are removed and the final top-K chunks are returned.
 
 If no lexical or semantic result is available, a simple token-overlap fallback ranks chunks by shared query terms.
 
@@ -290,68 +289,11 @@ TOP_K_VECTOR=30
 TOP_K_RERANK=8
 ```
 
-## 8. Multi-agent review workflow
+## 8. Prompt-based review workflow
 
-The review is coordinated by `MasterOrchestratorAgent`.
+The review endpoint sends one bounded prompt to the selected Gemini or Ollama model. The prompt asks the model to prioritize material risks, return at most 12 deduplicated findings, cite exact contract quotes, and return only the configured JSON schema.
 
-### Planning
-
-The orchestrator examines the user's review question and selects specialist agents by matching domain terms. If no domain terms match, all specialists are selected.
-
-Available specialists:
-
-- Liability Agent
-- Payment Agent
-- Termination Agent
-- Privacy Agent
-- IP Agent
-- Compliance Agent
-
-### Parallel specialist execution
-
-Selected specialists run concurrently using Python `ThreadPoolExecutor`.
-
-Each specialist:
-
-1. Searches for its domain terms.
-2. Selects relevant contract evidence.
-3. Produces a grounded finding.
-4. Validates that evidence is traceable to a source chunk.
-5. Emits audit events for start, analysis, and completion.
-
-If Gemini is configured, the specialist can generate a structured claim, reasoning, recommendation, severity, and confidence. Without Gemini, deterministic fallback wording is used.
-
-### Cross-clause analysis
-
-The cross-clause stage currently detects multiple payment findings and can produce a cross-clause finding when payment terms may conflict.
-
-### Evidence verification
-
-Findings without evidence are removed. Findings with evidence are marked:
-
-```text
-verification_status = verified
-```
-
-### Judge stage
-
-The judge records the number of verified findings and passes the verified result to the human review gate.
-
-The workflow is defined in `backend/app/graph.py`:
-
-```text
-plan
-  ↓
-specialists in parallel
-  ↓
-cross_clause
-  ↓
-verify
-  ↓
-judge
-```
-
-The graph can retry the specialist stage if verification does not pass, up to the configured retry limit.
+The API validates every returned quote against the stored chunks before saving a finding. If no model is selected, the API returns an empty report instead of running a multi-agent fallback.
 
 ## 9. Chat behavior
 
@@ -481,16 +423,18 @@ Important settings:
 
 ```env
 GEMINI_API_KEY=
-GEMINI_MODEL=gemini-2.5-flash
-GEMINI_EMBEDDING_MODEL=gemini-embedding-2-preview
+EMBEDDING_MODEL=sentence-transformers/all-mpnet-base-v2
+EMBEDDING_DIMENSION=768
+OLLAMA_BASE_URL=http://localhost:11434
 DATA_DIR=./data
 MAX_RETRIES=2
+REVIEW_CONTEXT_CHARS=50000
 TOP_K_BM25=30
 TOP_K_VECTOR=30
 TOP_K_RERANK=8
 ```
 
-Gemini is optional. Without an API key, uploads, chunking, BM25 retrieval, deterministic specialist review, and fallback chat remain available.
+Gemini is optional. When Ollama is running, its installed models are returned by `GET /api/models` and can be selected in chat. Without a configured chat model, the evidence-grounded fallback remains available.
 
 ## 12. Running locally
 
@@ -531,14 +475,11 @@ The repository also includes `start.cmd`, `start.ps1`, `stop.cmd`, and `stop.ps1
 backend/app/
 ├── config.py          Settings and environment configuration
 ├── gemini.py          Gemini generation and embedding client
-├── graph.py           LangGraph review workflow
 ├── ingestion.py       PDF extraction and chunking
 ├── main.py            FastAPI routes
 ├── models.py          Pydantic request, response, and domain models
-├── orchestrator.py    Planning, parallel agents, verification, judge
-├── retrieval.py       BM25 + FAISS hybrid retrieval
+├── retrieval.py       BM25 + Chroma hybrid retrieval
 ├── security.py        Evidence and untrusted-content checks
-├── specialists.py     Domain specialist agents
 └── storage.py         SQLite and filesystem persistence
 
 frontend/src/
@@ -570,7 +511,7 @@ FastAPI upload
       ├── Clause-aware JSON chunks
       ├── Optional Gemini embeddings
       ├── BM25 token index
-      └── Optional FAISS vector index
+      └── Persistent local Chroma vector store
 
 User review question
       │

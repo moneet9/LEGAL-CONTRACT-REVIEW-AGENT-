@@ -1,0 +1,2 @@
+.index-progress{height:4px;width:100%;max-width:360px;background:#e8efea;border-radius:3px;overflow:hidden;margin-top:10px}.index-progress span{display:block;height:100%;background:#42a182;border-radius:3px;transition:width .35s ease}
+.proposed-language{display:flex;flex-direction:column;gap:5px;margin-top:9px;padding:8px 9px;background:#f4faf7;border-left:2px solid #70b39a;color:#58766b;font-size:10px;line-height:1.45}.proposed-language b{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#39866e}.proposed-language span{white-space:pre-wrap}

@@ -20,6 +20,14 @@ class LocalStore:
         with sqlite3.connect(self.db) as c: row=c.execute("select data from contracts where id=?",(cid,)).fetchone()
         if not row: raise KeyError(cid)
         return ContractMeta.model_validate_json(row[0])
+    def reusable_contract(self,cid,filename,digest,workspace_id):
+        try: meta=self.get_meta(cid)
+        except KeyError: return None
+        if (meta.original_filename != filename or meta.sha256 != digest or
+                meta.workspace_id != workspace_id or meta.processing_status != "ready" or
+                not (self.root/"chunks"/f"{cid}.json").is_file()): return None
+        if settings.enable_local_embeddings and not (self.root/"embeddings"/f"{cid}.npy").is_file(): return None
+        return meta
     def all_meta(self,workspace_id="default"):
         with sqlite3.connect(self.db) as c: rows=c.execute("select data from contracts order by rowid desc").fetchall()
         if workspace_id: rows=[row for row in rows if ContractMeta.model_validate_json(row[0]).workspace_id==workspace_id]
