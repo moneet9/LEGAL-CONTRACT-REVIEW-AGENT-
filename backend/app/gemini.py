@@ -10,11 +10,13 @@ class GeminiClient:
         if self.available:
             from google import genai
             self.client=genai.Client(api_key=settings.gemini_api_key)
-    def generate_structured(self,prompt,schema,model=None):
+    def generate_structured(self,prompt,schema,model=None,temperature=None):
         if not self.client: return None
         for attempt in range(settings.max_retries+1):
             try:
-                response=self.client.models.generate_content(model=model or settings.gemini_model,contents=prompt,config={"response_mime_type":"application/json","response_schema":schema})
+                config={"response_mime_type":"application/json","response_schema":schema}
+                if temperature is not None: config["temperature"]=temperature
+                response=self.client.models.generate_content(model=model or settings.gemini_model,contents=prompt,config=config)
                 return json.loads(response.text)
             except Exception:
                 if attempt>=settings.max_retries: raise
@@ -52,28 +54,16 @@ def default_model(models: list[dict[str, str]]) -> str | None:
     return google or (ids[0] if ids else None)
 
 
-def generate(prompt: str, schema: dict, model: str | None = None):
+def generate(prompt: str, schema: dict, model: str | None = None, temperature: float | None = None):
     if not model:
         return None
     selected = model
     if selected.startswith(("gemini", "gemma")):
-        candidates = [selected]
-        try:
-            candidates.extend(item["id"] for item in available_models() if item["provider"] == "Google" and item["id"] != selected)
-        except Exception:
-            pass
-        errors=[]
-        for candidate in candidates[:4]:
-            try:
-                return GeminiClient().generate_structured(prompt, schema, candidate)
-            except Exception as error:
-                errors.append(f"{candidate}: {error}")
-                continue
-        raise ModelGenerationError("Google model API failed after trying available models. " + " | ".join(errors))
+        return GeminiClient().generate_structured(prompt, schema, selected, temperature)
     try:
         response = httpx.post(
             f"{settings.ollama_base_url}/api/generate",
-            json={"model": selected, "prompt": prompt, "format": "json", "stream": False},
+            json={"model": selected, "prompt": prompt, "format": "json", "stream": False, **({"options": {"temperature": temperature}} if temperature is not None else {})},
             timeout=120,
         )
         response.raise_for_status()

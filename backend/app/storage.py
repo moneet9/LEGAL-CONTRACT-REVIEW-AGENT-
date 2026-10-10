@@ -11,6 +11,10 @@ class LocalStore:
             c.execute("create table if not exists findings (id text primary key, contract_id text not null, data text not null, decision text)")
             c.execute("create table if not exists messages (id integer primary key autoincrement, contract_id text not null, role text not null, content text not null, created_at text not null, citations text not null)")
             c.execute("create table if not exists workspace_messages (id integer primary key autoincrement, workspace_id text not null, role text not null, content text not null, created_at text not null, citations text not null)")
+            try: c.execute("alter table messages add column model text")
+            except sqlite3.OperationalError: pass
+            try: c.execute("alter table workspace_messages add column model text")
+            except sqlite3.OperationalError: pass
     def contract_id(self, content, workspace_id="default"):
         digest=hashlib.sha256(content).hexdigest(); scope=hashlib.sha256(workspace_id.encode()).hexdigest()[:8]; return f"contract_{scope}_{digest[:12]}",digest
     def save_contract(self, meta, content):
@@ -44,30 +48,31 @@ class LocalStore:
         return np.load(self.root/"embeddings"/f"{cid}.npy")
     def save_findings(self,cid,findings):
         with sqlite3.connect(self.db) as c:
+            c.execute("delete from findings where contract_id=?",(cid,))
             for f in findings: c.execute("insert or replace into findings values (?,?,?,coalesce((select decision from findings where id=?),null))",(f.finding_id,cid,f.model_dump_json(),f.finding_id))
     def findings(self,cid):
         with sqlite3.connect(self.db) as c: rows=c.execute("select data,decision from findings where contract_id=?",(cid,)).fetchall()
         return [(Finding.model_validate_json(d),dec) for d,dec in rows]
     def decide(self,fid,decision):
         with sqlite3.connect(self.db) as c: c.execute("update findings set decision=? where id=?",(decision,fid))
-    def save_message(self,cid,role,content,citations=None):
+    def save_message(self,cid,role,content,citations=None,model=None):
         citations = citations or []
         now=datetime.now(timezone.utc)
         with sqlite3.connect(self.db) as c:
-            c.execute("insert into messages(contract_id,role,content,created_at,citations) values (?,?,?,?,?)",(cid,role,content,now.isoformat(),json.dumps([x.model_dump() if hasattr(x,'model_dump') else x for x in citations])))
-        return ChatMessage(role=role,content=content,created_at=now,citations=[Evidence.model_validate(x) for x in citations])
+            c.execute("insert into messages(contract_id,role,content,created_at,citations,model) values (?,?,?,?,?,?)",(cid,role,content,now.isoformat(),json.dumps([x.model_dump() if hasattr(x,'model_dump') else x for x in citations]),model))
+        return ChatMessage(role=role,content=content,created_at=now,citations=[Evidence.model_validate(x) for x in citations],model=model)
     def messages(self,cid):
-        with sqlite3.connect(self.db) as c: rows=c.execute("select role,content,created_at,citations from messages where contract_id=? order by id",(cid,)).fetchall()
-        return [ChatMessage(role=r,content=content,created_at=datetime.fromisoformat(ts),citations=[Evidence.model_validate(x) for x in json.loads(cits)]) for r,content,ts,cits in rows]
-    def save_workspace_message(self,role,content,citations=None,workspace_id="default"):
+        with sqlite3.connect(self.db) as c: rows=c.execute("select role,content,created_at,citations,model from messages where contract_id=? order by id",(cid,)).fetchall()
+        return [ChatMessage(role=r,content=content,created_at=datetime.fromisoformat(ts),citations=[Evidence.model_validate(x) for x in json.loads(cits)],model=model) for r,content,ts,cits,model in rows]
+    def save_workspace_message(self,role,content,citations=None,workspace_id="default",model=None):
         citations = citations or []
         now=datetime.now(timezone.utc)
         with sqlite3.connect(self.db) as c:
-            c.execute("insert into workspace_messages(workspace_id,role,content,created_at,citations) values (?,?,?,?,?)",(workspace_id,role,content,now.isoformat(),json.dumps([x.model_dump() if hasattr(x,'model_dump') else x for x in citations])))
-        return ChatMessage(role=role,content=content,created_at=now,citations=[Evidence.model_validate(x) for x in citations])
+            c.execute("insert into workspace_messages(workspace_id,role,content,created_at,citations,model) values (?,?,?,?,?,?)",(workspace_id,role,content,now.isoformat(),json.dumps([x.model_dump() if hasattr(x,'model_dump') else x for x in citations]),model))
+        return ChatMessage(role=role,content=content,created_at=now,citations=[Evidence.model_validate(x) for x in citations],model=model)
     def workspace_messages(self,workspace_id="default"):
-        with sqlite3.connect(self.db) as c: rows=c.execute("select role,content,created_at,citations from workspace_messages where workspace_id=? order by id",(workspace_id,)).fetchall()
-        return [ChatMessage(role=r,content=content,created_at=datetime.fromisoformat(ts),citations=[Evidence.model_validate(x) for x in json.loads(cits)]) for r,content,ts,cits in rows]
+        with sqlite3.connect(self.db) as c: rows=c.execute("select role,content,created_at,citations,model from workspace_messages where workspace_id=? order by id",(workspace_id,)).fetchall()
+        return [ChatMessage(role=r,content=content,created_at=datetime.fromisoformat(ts),citations=[Evidence.model_validate(x) for x in json.loads(cits)],model=model) for r,content,ts,cits,model in rows]
     def audit(self,event):
         event={**event,"timestamp":datetime.now(timezone.utc).isoformat()}
         with (self.root/"audit"/"events.jsonl").open("a",encoding="utf-8") as f: f.write(json.dumps(event)+"\n")

@@ -11,9 +11,10 @@ class Settings(BaseSettings):
     chunk_size_chars: int = 900
     chunk_overlap_chars: int = 120
     ollama_base_url: str = "http://localhost:11434"
+    cors_origins: str = "http://localhost:5173"
     data_dir: Path = Path("./data")
     max_retries: int = 2
-    review_context_chars: int = 50000
+    review_context_chars: int = 500000
     top_k_bm25: int = 30; top_k_vector: int = 30; top_k_rerank: int = 8
     model_config = SettingsConfigDict(env_file=".env", env_prefix="", extra="ignore")
 settings = Settings()

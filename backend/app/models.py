@@ -14,18 +14,31 @@ class Finding(BaseModel):
 class ReviewRequest(BaseModel):
     question: str = "Review this contract for material legal and commercial risks."
     model: str | None = None
+    party: str = ""
+    perspective: str = ""
+    contract_type: str = ""
+    jurisdiction: str = ""
 class ChatRequest(BaseModel):
     message: str
     model: str | None = None
+    party: str = ""
+    perspective: str = ""
+    contract_type: str = ""
+    jurisdiction: str = ""
 class WorkspaceChatRequest(BaseModel):
     message: str
     contract_ids: list[str] = Field(default_factory=list)
     model: str | None = None
+    party: str = ""
+    perspective: str = ""
+    contract_type: str = ""
+    jurisdiction: str = ""
 class ChatMessage(BaseModel):
     role: str
     content: str
     created_at: datetime
     citations: list[Evidence] = Field(default_factory=list)
+    model: str | None = None
 class DecisionRequest(BaseModel):
     decision: str; note: str = ""
 class ContractMeta(BaseModel):
