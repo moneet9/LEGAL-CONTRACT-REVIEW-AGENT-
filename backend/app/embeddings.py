@@ -1,10 +1,12 @@
 from functools import lru_cache
+from threading import RLock
 
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from .config import settings
 
+_EMBED_LOCK = RLock()
 
 @lru_cache(maxsize=1)
 def _model() -> SentenceTransformer:
@@ -13,22 +15,25 @@ def _model() -> SentenceTransformer:
     return model
 
 
-def embed(texts: list[str], progress_callback=None, batch_size: int | None = None) -> list[list[float]]:
+def embed(texts: list[str], progress_callback=None, batch_size: int | None = None, max_tokens: int | None = None, expected_dimension: int | None = None) -> list[list[float]]:
     if not texts:
         return []
     model = _model()
     batch_size = batch_size or settings.embedding_batch_size
     batches = []
-    for start in range(0, len(texts), batch_size):
-        vectors = model.encode(texts[start:start + batch_size], normalize_embeddings=True, show_progress_bar=False, convert_to_numpy=True)
-        batches.extend(np.asarray(vectors, dtype="float32").tolist())
-        if progress_callback:
-            progress_callback(min(start + batch_size, len(texts)), len(texts))
+    with _EMBED_LOCK:
+        model.max_seq_length = max_tokens or settings.embedding_max_tokens
+        for start in range(0, len(texts), batch_size):
+            vectors = model.encode(texts[start:start + batch_size], normalize_embeddings=True, show_progress_bar=False, convert_to_numpy=True)
+            batches.extend(np.asarray(vectors, dtype="float32").tolist())
+            if progress_callback:
+                progress_callback(min(start + batch_size, len(texts)), len(texts))
     values = np.asarray(batches, dtype="float32")
-    if values.ndim != 2 or values.shape[1] != settings.embedding_dimension:
+    dimension = expected_dimension or settings.embedding_dimension
+    if values.ndim != 2 or values.shape[1] != dimension:
         raise RuntimeError(
             f"Embedding model returned {values.shape[1] if values.ndim == 2 else 'invalid'} dimensions; "
-            f"expected {settings.embedding_dimension}."
+            f"expected {dimension}."
         )
     return values.tolist()
 

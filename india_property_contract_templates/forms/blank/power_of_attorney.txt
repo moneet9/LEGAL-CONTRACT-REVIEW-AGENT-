@@ -1,0 +1,22 @@
+[STAMP PAPER / E-STAMP: Non-judicial stamp paper or e-stamp certificate of the value required by the [STATE] Stamp Act. E-Stamp Certificate No./UIN: [UIN]  Date: [DATE]  Amount: Rs. [AMOUNT]]
+
+GENERAL / SPECIAL POWER OF ATTORNEY
+
+KNOW ALL MEN BY THESE PRESENTS that I, [PRINCIPAL NAME], S/o / D/o / W/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN], Aadhaar [AADHAAR] (the "PRINCIPAL"),
+do hereby appoint and constitute [ATTORNEY NAME], S/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN] (the "ATTORNEY"), as my true and lawful attorney to act in my name and on my behalf for the following purposes:
+
+1. To appear, represent, sign, execute, present and file documents before [AUTHORITY/SUB-REGISTRAR/COURT/BANK] in respect of [SPECIFIED PROPERTY OR ACCOUNT, described in the Schedule].
+2. To collect rent, pay taxes and dues, manage and maintain the property described in the Schedule, and to deposit and withdraw sums in my account no. [ACCOUNT NO.] with [BANK].
+3. To engage advocates, file and defend cases, and sign vakalatnama, affidavits and applications in matter no. [CASE NO.].
+4. [Special power, if any: To execute and register a [SALE DEED/LEASE/MORTGAGE] of the Schedule Property in favour of [NAME] for a consideration not less than Rs. [AMOUNT].]
+5. I hereby ratify and confirm all lawful acts done by the Attorney under this power. The Attorney shall render accounts of all acts done on my behalf.
+6. This power of attorney is revocable and shall remain valid until [DATE] or until revoked by me in writing; it shall cease on my death, insolvency or unsoundness of mind. It is not coupled with any interest,
+   no consideration has been paid for it, and it does not by itself transfer title in the property.
+7. The Attorney has accepted this appointment and his/her specimen signature is given below: [SPECIMEN SIGNATURE].
+8. This power of attorney is executed on stamp paper as per the State Stamp Act, and shall be notarised/registered before the Sub-Registrar [and apostilled/attested by the Indian consulate if executed abroad].
+
+SCHEDULE: [PROPERTY OR ACCOUNT/CASE DETAILS]
+
+IN WITNESS WHEREOF I have signed this Power of Attorney at [PLACE] on this [DAY] day of [MONTH] [YEAR], in the presence of the witnesses:
+PRINCIPAL: [SIGNATURE]   ATTORNEY (acceptance): [SIGNATURE]
+WITNESS 1: [NAME, ADDRESS, SIGNATURE]   WITNESS 2: [NAME, ADDRESS, SIGNATURE]

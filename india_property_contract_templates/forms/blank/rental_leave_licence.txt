@@ -1,0 +1,37 @@
+[STAMP PAPER / E-STAMP: Non-judicial stamp paper or e-stamp certificate of the value required by the [STATE] Stamp Act. E-Stamp Certificate No./UIN: [UIN]  Date: [DATE]  Amount: Rs. [AMOUNT]]
+
+LEAVE AND LICENCE / RENTAL AGREEMENT
+
+This Agreement is made at [PLACE] on this [DAY] day of [MONTH] [YEAR]
+
+BETWEEN
+[LICENSOR/LANDLORD NAME], S/o / D/o / W/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN], Aadhaar [AADHAAR] (the "LICENSOR/LANDLORD")
+AND
+[LICENSEE/TENANT NAME], S/o / D/o / W/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN], Aadhaar [AADHAAR] (the "LICENSEE/TENANT").
+
+The Licensor is the owner of the premises [FLAT/UNIT NO.], [ADDRESS] (the "Premises") and has agreed to give it on leave and licence/rent
+to the Licensee for residential/commercial use only, on the following terms:
+
+1. TERM: The licence/tenancy is for [11] months commencing on [DATE] (with effect from) and ending on [DATE]. It may be renewed by mutual written consent, with rent revised as per clause 3.
+2. RENT: The monthly rent/licence fee is Rs. [AMOUNT], payable in advance on or before the [5th] of each month by bank transfer/cheque/UPI.
+3. ESCALATION: The rent shall be increased by [10]% per annum on renewal.
+4. SECURITY DEPOSIT: The Licensee has paid an interest-free refundable security deposit of Rs. [AMOUNT] ([NUMBER] months' rent),
+   to be refunded within [30] days of vacating, after deduction of any dues and damage beyond normal wear and tear.
+5. LOCK-IN AND NOTICE: There is a lock-in period of [6] months. After the lock-in, either party may terminate by giving [60] days' prior written notice.
+6. MAINTENANCE AND UTILITIES: Electricity, water, gas, internet and society maintenance charges shall be paid by the [LICENSEE/LICENSOR];
+   property tax and structural repairs by the Licensor; minor day-to-day repairs by the Licensee.
+7. USE: The Premises shall be used only for [RESIDENTIAL/COMMERCIAL] purpose; no unlawful activity, nuisance or annoyance to neighbours; society rules shall be followed.
+   Police verification of the Licensee shall be completed.
+8. SUB-LETTING: The Licensee shall not sub-let, sub-license or assign the Premises or any part of it.
+9. ENTRY: The Licensor may enter the Premises to inspect on giving [24] hours' prior notice.
+10. ALTERATIONS AND DAMAGE: No structural alterations without the Licensor's written consent; the Licensee shall restore the Premises to its original condition and bear damage caused by negligence.
+11. DEFAULT: If rent is unpaid for [2] months or any material term is breached and not cured within [15] days of notice, the Licensor may terminate and take possession.
+12. HANDOVER: On expiry/termination the Licensee shall vacate and hand over vacant possession, with all fixtures listed in the Inventory.
+13. INVENTORY: Fixtures and furnishings: [LIST OF FITTINGS/ITEMS].
+14. DISPUTES: Disputes shall be resolved by mediation/arbitration at [PLACE]; courts at [PLACE] shall have jurisdiction.
+15. STAMP/REGISTRATION: Stamp duty is paid as per the State Stamp Act. The Agreement shall be registered with the Sub-Registrar where required by State law,
+    and details intimated to the Rent Authority/police station as required.
+
+IN WITNESS WHEREOF the parties have signed on the date first written above:
+LICENSOR/LANDLORD: [SIGNATURE]   LICENSEE/TENANT: [SIGNATURE]
+WITNESS 1: [NAME, ADDRESS, SIGNATURE]   WITNESS 2: [NAME, ADDRESS, SIGNATURE]

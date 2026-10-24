@@ -1,0 +1,34 @@
+[STAMP PAPER / E-STAMP: Non-judicial stamp paper or e-stamp certificate of the value required by the [STATE] Stamp Act. E-Stamp Certificate No./UIN: [UIN]  Date: [DATE]  Amount: Rs. [AMOUNT]]
+
+AGREEMENT TO SELL
+
+This Agreement to Sell is made at [PLACE] on this [DAY] day of [MONTH] [YEAR]
+
+BETWEEN
+[SELLER NAME], S/o / D/o / W/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN] (hereinafter the "VENDOR")
+AND
+[BUYER NAME], S/o / D/o / W/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN] (hereinafter the "PURCHASER").
+
+WHEREAS the Vendor is the absolute owner of the property described in the Schedule (the "Property") and has a clear and marketable title,
+free from all encumbrances, charges, liens and pending litigation, and has agreed to sell, and the Purchaser has agreed to purchase, the Property.
+
+1. The total sale consideration is Rs. [AMOUNT] (Rupees [AMOUNT IN WORDS] only).
+2. The Purchaser has paid Rs. [ADVANCE] as earnest/advance money by [MODE] no. [NO] dated [DATE], the receipt of which the Vendor hereby acknowledges.
+3. The balance consideration of Rs. [BALANCE] shall be paid on or before [DATE], at the time of execution and registration of the Sale Deed.
+4. The Vendor shall execute and register the Sale Deed in favour of the Purchaser on or before [DATE]. Time is of the essence of this Agreement.
+5. The Vendor shall hand over title documents, encumbrance certificate, original deeds and obtain all NOCs and approvals
+   (society/builder/authority/bank) required, and the Purchaser may conduct a title search and legal due diligence.
+6. The Vendor warrants a clear and marketable title; there is no litigation, court stay, mortgage or other encumbrance on the Property.
+7. Possession of the Property shall be delivered at [TIME OF SALE DEED / AS AGREED]. [If possession is given now, the parties acknowledge section 53A of the Transfer of Property Act, 1882 and the applicable State stamp duty.]
+8. If the Purchaser defaults, the advance shall be forfeited; if the Vendor defaults, the Vendor shall refund the advance with [DOUBLE/INTEREST]
+   and the Purchaser may seek specific performance or compensation as damages.
+9. Either party may terminate this Agreement for material breach after [DAYS] days' written notice; on cancellation the advance shall be dealt with as per clause 8.
+10. All disputes shall be referred to arbitration under the Arbitration and Conciliation Act, 1996, and courts at [PLACE] shall have jurisdiction.
+    This Agreement is governed by the laws of India.
+11. Stamp duty on this Agreement has been paid as per the State Stamp Act, and the Agreement shall be registered with the Sub-Registrar under the Registration Act, 1908 where required.
+
+SCHEDULE OF PROPERTY: [PLOT/FLAT NO., SURVEY/CTS NO., ADDRESS, AREA, BOUNDARIES NORTH/SOUTH/EAST/WEST]
+
+IN WITNESS WHEREOF the parties have signed this Agreement in the presence of the witnesses:
+VENDOR: [SIGNATURE]   PURCHASER: [SIGNATURE]
+WITNESS 1: [NAME, ADDRESS, SIGNATURE]   WITNESS 2: [NAME, ADDRESS, SIGNATURE]

@@ -1,0 +1,315 @@
+{
+  "id": "agreement_to_sell",
+  "name": "Agreement to Sell / Sale Agreement (before the sale deed)",
+  "applies_to": "Agreement to Sell / Sale Agreement (before the sale deed)",
+  "detect_keywords": [
+    "agreement (to|for|of) (sell|sale)|sale agreement|agreement to sale|agreement of sale",
+    "\\bvendors?\\b|\\bseller\\b",
+    "\\bvendees?\\b|\\bpurchasers?\\b|\\bbuyer\\b",
+    "(earnest|advance|token) (money|amount)",
+    "balance (sale )?consideration",
+    "shall (sell|purchase)",
+    "time (is|shall be) (of )?the essence",
+    "agree(s|d)? to (sell|purchase)"
+  ],
+  "sources": [
+    {
+      "title": "Transfer of Property Act, 1882",
+      "where": "https://www.indiacode.nic.in",
+      "key": "tpa"
+    },
+    {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in",
+      "key": "reg"
+    },
+    {
+      "title": "Indian Stamp Act, 1899 (+ each State's Stamp Act/Schedule)",
+      "where": "https://www.indiacode.nic.in and the State IGR/Stamps dept.",
+      "key": "stamp"
+    },
+    {
+      "title": "Delhi Revenue Dept. model deeds (Sale, Agreement to Sell, Lease, Exchange, Will, GPA, Gift)",
+      "where": "https://dmeast.delhi.gov.in/model-deed-page/",
+      "key": "delhi"
+    },
+    {
+      "title": "Suraj Lamp & Industries v. State of Haryana (SC, 2011) - GPA/SA/Will 'sales' are not valid conveyances",
+      "where": "Supreme Court of India",
+      "key": "suraj"
+    }
+  ],
+  "required_clauses": [
+    {
+      "id": "parties",
+      "title": "Parties with full names, parentage/address and capacity",
+      "keywords": [
+        "s/o|d/o|w/o|son of|daughter of|wife of",
+        "resident of|r/o|residing at",
+        "hereinafter (called|referred)",
+        "aged about|major"
+      ],
+      "severity": "high",
+      "guidance": "Names, father/spouse name, age, address. Parties must be majors of sound mind (Contract Act s.11).",
+      "source": []
+    },
+    {
+      "id": "party_ids",
+      "title": "Party identity proofs (PAN / Aadhaar)",
+      "keywords": [
+        "\\bPAN\\b",
+        "aadhaar|aadhar",
+        "identity (proof|card)",
+        "photo ?id"
+      ],
+      "severity": "medium",
+      "guidance": "PAN is required on high-value immovable property transactions; many states also record Aadhaar.",
+      "source": []
+    },
+    {
+      "id": "property",
+      "title": "Property description (schedule, survey/plot no., area, boundaries)",
+      "keywords": [
+        "schedule",
+        "survey (no|number)|khasra|khewat|cts no|plot no|flat no|gat no",
+        "bounded (by|as follows)|north|east|south|west",
+        "(square|sq\\.?) ?(feet|ft|yards?|metres?|meters?)|area (of|admeasuring)|admeasuring"
+      ],
+      "severity": "high",
+      "guidance": "Unambiguous identification of the property is essential for registration.",
+      "source": []
+    },
+    {
+      "id": "total_price",
+      "title": "Total sale price",
+      "keywords": [
+        "total (sale )?(consideration|price)",
+        "sum of rs\\.?|rupees",
+        "agreed (sale )?(price|consideration)"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "advance",
+      "title": "Earnest/advance money with payment mode and receipt",
+      "keywords": [
+        "(earnest|advance|token) (money|amount)",
+        "receipt (of which|whereof)|hereby acknowledges?",
+        "cheque|\\bRTGS\\b|\\bNEFT\\b|\\bUTR\\b|demand draft"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "balance_schedule",
+      "title": "Balance payment schedule",
+      "keywords": [
+        "balance (sale )?(consideration|amount|price)",
+        "(on or before|within) \\d+|\\bdays?\\b",
+        "at the time of (execution|registration) of (the )?sale deed"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "completion_date",
+      "title": "Date/period for executing the sale deed; time is of the essence",
+      "keywords": [
+        "execute (and register )?(the )?sale deed",
+        "time (is|shall be) (of )?the essence",
+        "on or before"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "title_documents",
+      "title": "Title documents, encumbrance certificate and due diligence",
+      "keywords": [
+        "title (deeds?|documents?|search)",
+        "encumbrance certificate|\\bEC\\b",
+        "(original|copies of) (documents|deeds)",
+        "search report|legal opinion"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "no_encumbrance",
+      "title": "Seller's warranty: clear and marketable title, no encumbrance or litigation",
+      "keywords": [
+        "free from (all )?(encumbrances?|charges?|liens?)",
+        "marketable title|clear title",
+        "no (pending )?(litigation|court|stay)"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "noc_approvals",
+      "title": "NOCs / approvals (society, builder, authority, bank)",
+      "keywords": [
+        "\\bNOC\\b|no objection",
+        "society|association",
+        "approval|permission",
+        "mortgage[^.]{0,60}(bank|loan)"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "possession_clause",
+      "title": "Possession terms",
+      "keywords": [
+        "possession"
+      ],
+      "severity": "medium",
+      "guidance": "If possession is given under the agreement it attracts s.53A TPA and stamp duty as per State law (conveyance-equivalent in some states).",
+      "source": []
+    },
+    {
+      "id": "default_remedy",
+      "title": "Default: forfeiture of advance / refund / specific performance",
+      "keywords": [
+        "forfeit",
+        "refund",
+        "specific performance",
+        "(double|twice) the (advance|earnest)",
+        "liquidated damages|compensation"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "cancellation",
+      "title": "Cancellation / termination",
+      "keywords": [
+        "terminat|cancel(l)?ation|rescind"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "dispute",
+      "title": "Dispute resolution and jurisdiction",
+      "keywords": [
+        "arbitrat",
+        "jurisdiction",
+        "courts? (at|of|in)",
+        "governed by"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "stamp",
+      "title": "Stamp duty paid (e-stamp / stamp paper details)",
+      "keywords": [
+        "stamp duty",
+        "e-?stamp",
+        "stamp paper",
+        "\\bUIN\\b|certificate (no|number)|franking",
+        "adjudicat"
+      ],
+      "severity": "high",
+      "guidance": "Instrument must be stamped as per the State Stamp Act before/at execution; unstamped documents are inadmissible until duty and penalty are paid.",
+      "source": []
+    },
+    {
+      "id": "registration_agreement",
+      "title": "Registration of the agreement (needed if possession given / State rules)",
+      "keywords": [
+        "sub-?registrar",
+        "registration act",
+        "registered",
+        "section 53-?a|part performance"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "execution",
+      "title": "Place and date of execution; signatures",
+      "keywords": [
+        "executed (at|on)",
+        "(signed|sealed) (and delivered|by)",
+        "in witness whereof",
+        "this \\d+(st|nd|rd|th)? day of|dated (this )?\\w* ?day|\\bday of\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "witnesses",
+      "title": "Signatures and attestation by two witnesses",
+      "keywords": [
+        "witness(es)?",
+        "in the presence of",
+        "attested",
+        "thumb impression"
+      ],
+      "severity": "high",
+      "guidance": "Two attesting witnesses are mandatory for gift, mortgage and will; customary/State-required for others.",
+      "source": []
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "notary_only",
+      "title": "Property transfer 'notarised' only / on plain paper",
+      "pattern": "(notari[sz]ed|on plain paper|on white paper|affidavit)[^.]{0,80}(sale|transfer|gift|mortgage|lease)",
+      "why": "Notarisation is not registration; immovable property transfers above the statutory limit need a registered, stamped instrument."
+    },
+    {
+      "id": "gpa_sale",
+      "title": "'GPA sale' / irrevocable GPA used as a transfer",
+      "pattern": "irrevocable (general )?power of attorney[^.]{0,120}(sell|sale|transfer|convey)|general power of attorney[^.]{0,80}(in lieu of|instead of) (sale|conveyance)",
+      "why": "Suraj Lamp v. State of Haryana (SC 2011): GPA/agreement/will sales do not convey title."
+    },
+    {
+      "id": "cash_large",
+      "title": "Large cash consideration",
+      "pattern": "(paid|payable|received)[^.]{0,40}\\bin cash\\b[^.]{0,60}(lakh|lac|crore)|cash of rs\\.? ?[\\d,]{7,}",
+      "why": "Cash receipts of Rs 20,000+ for immovable property are restricted under the Income-tax Act (ss.269SS/269ST); also undervaluation risk."
+    },
+    {
+      "id": "undervalue",
+      "title": "Consideration expressly lower than market/circle rate",
+      "pattern": "(lower|less) than (the )?(market|circle|ready ?reckoner|guidance) (value|rate)|show(n|ing)? (a )?lower (value|consideration)",
+      "why": "Undervaluation attracts stamp-duty deficiency, penalty and tax consequences."
+    },
+    {
+      "id": "blank_fields",
+      "title": "Unfilled placeholders in final document",
+      "pattern": "\\[(name|date|amount|address|survey|plot|area)[^\\]]*\\]|_{6,}|\\bXXXX+\\b",
+      "why": "Final deed should not contain blanks."
+    },
+    {
+      "id": "unregistered_clause",
+      "title": "Deed says it need not be registered",
+      "pattern": "(need|shall) not be registered|no need (to|for) regist|unregistered (deed|agreement) (is|shall be) (valid|binding)",
+      "why": "Compulsorily registrable instruments are not effective for transferring an interest without registration (Registration Act s.17, TPA s.54/107/123)."
+    },
+    {
+      "id": "sale_in_agreement",
+      "title": "Agreement purports to be final conveyance",
+      "pattern": "hereby (sells?|conveys?|transfers?) (absolutely|and assigns)",
+      "why": "An agreement to sell does not transfer ownership (TPA s.54); use a sale deed."
+    }
+  ],
+  "benchmarks": [],
+  "disclaimer": "Checklist built from the cited central statutes and official state/NGDRS deed formats. Stamp duty rates, registration fees and some mandatory clauses are STATE-specific; verify with the State Registration & Stamps department. Not legal advice."
+}

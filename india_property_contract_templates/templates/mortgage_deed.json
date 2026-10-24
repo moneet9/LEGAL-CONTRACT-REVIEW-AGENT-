@@ -1,0 +1,284 @@
+{
+  "id": "mortgage_deed",
+  "name": "Mortgage Deed (TPA ss.58-104)",
+  "applies_to": "Mortgage Deed (TPA ss.58-104)",
+  "detect_keywords": [
+    "mortgage deed",
+    "\\bmortgagors?\\b",
+    "\\bmortgagees?\\b",
+    "redemption|redeem",
+    "principal (sum|amount)",
+    "equitable mortgage",
+    "simple mortgage",
+    "usufructuary|english mortgage",
+    "deposit of title deeds"
+  ],
+  "sources": [
+    {
+      "title": "Transfer of Property Act, 1882",
+      "where": "https://www.indiacode.nic.in",
+      "key": "tpa"
+    },
+    {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in",
+      "key": "reg"
+    },
+    {
+      "title": "Indian Stamp Act, 1899 (+ each State's Stamp Act/Schedule)",
+      "where": "https://www.indiacode.nic.in and the State IGR/Stamps dept.",
+      "key": "stamp"
+    },
+    {
+      "title": "Delhi Revenue Dept. model deeds (Sale, Agreement to Sell, Lease, Exchange, Will, GPA, Gift)",
+      "where": "https://dmeast.delhi.gov.in/model-deed-page/",
+      "key": "delhi"
+    }
+  ],
+  "required_clauses": [
+    {
+      "id": "parties",
+      "title": "Parties with full names, parentage/address and capacity",
+      "keywords": [
+        "s/o|d/o|w/o|son of|daughter of|wife of",
+        "resident of|r/o|residing at",
+        "hereinafter (called|referred)",
+        "aged about|major"
+      ],
+      "severity": "high",
+      "guidance": "Names, father/spouse name, age, address. Parties must be majors of sound mind (Contract Act s.11).",
+      "source": []
+    },
+    {
+      "id": "party_ids",
+      "title": "Party identity proofs (PAN / Aadhaar)",
+      "keywords": [
+        "\\bPAN\\b",
+        "aadhaar|aadhar",
+        "identity (proof|card)",
+        "photo ?id"
+      ],
+      "severity": "medium",
+      "guidance": "PAN is required on high-value immovable property transactions; many states also record Aadhaar.",
+      "source": []
+    },
+    {
+      "id": "mortgage_type",
+      "title": "Type of mortgage (simple / English / usufructuary / deposit of title deeds)",
+      "keywords": [
+        "simple mortgage|english mortgage|usufructuary|mortgage by conditional sale|equitable mortgage|deposit of title deeds|anomalous"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.58.",
+      "source": []
+    },
+    {
+      "id": "principal_interest",
+      "title": "Principal amount and interest",
+      "keywords": [
+        "principal (sum|amount)",
+        "interest (at|@|rate)",
+        "rate of interest",
+        "sum of rs\\.?|rupees"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "repayment",
+      "title": "Repayment schedule / due date",
+      "keywords": [
+        "repay(ment)?",
+        "(installments?|emis?)",
+        "due date|on or before"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "property",
+      "title": "Property description (schedule, survey/plot no., area, boundaries)",
+      "keywords": [
+        "schedule",
+        "survey (no|number)|khasra|khewat|cts no|plot no|flat no|gat no",
+        "bounded (by|as follows)|north|east|south|west",
+        "(square|sq\\.?) ?(feet|ft|yards?|metres?|meters?)|area (of|admeasuring)|admeasuring"
+      ],
+      "severity": "high",
+      "guidance": "Unambiguous identification of the property is essential for registration.",
+      "source": []
+    },
+    {
+      "id": "mortgagor_title",
+      "title": "Mortgagor's title and right to mortgage",
+      "keywords": [
+        "absolute owner|good title|right to mortgage",
+        "title (deeds?|documents?)"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "covenants",
+      "title": "Mortgagor's covenants (insurance, taxes, no further charge, preserve security)",
+      "keywords": [
+        "insur",
+        "(property )?tax",
+        "(no|not) (create|further) (charge|encumbrance|mortgage)",
+        "preserve|maintain"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.65.",
+      "source": []
+    },
+    {
+      "id": "default_remedies",
+      "title": "Default and mortgagee's remedies (sale, foreclosure, possession)",
+      "keywords": [
+        "default",
+        "(power of )?sale|foreclos",
+        "possession"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.67-68.",
+      "source": []
+    },
+    {
+      "id": "redemption",
+      "title": "Right of redemption",
+      "keywords": [
+        "redemption|redeem",
+        "reconvey|release (of )?(the )?(mortgage|security)"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.60: right of redemption cannot be fettered.",
+      "source": []
+    },
+    {
+      "id": "title_deposit",
+      "title": "Custody of original title deeds",
+      "keywords": [
+        "original (title )?(deeds?|documents?)",
+        "deposit(ed)? (of )?(the )?title"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "stamp",
+      "title": "Stamp duty paid (e-stamp / stamp paper details)",
+      "keywords": [
+        "stamp duty",
+        "e-?stamp",
+        "stamp paper",
+        "\\bUIN\\b|certificate (no|number)|franking",
+        "adjudicat"
+      ],
+      "severity": "high",
+      "guidance": "Instrument must be stamped as per the State Stamp Act before/at execution; unstamped documents are inadmissible until duty and penalty are paid.",
+      "source": []
+    },
+    {
+      "id": "registration",
+      "title": "Registration particulars (Sub-Registrar, Registration Act)",
+      "keywords": [
+        "sub-?registrar",
+        "registration act",
+        "registered",
+        "presented for registration"
+      ],
+      "severity": "high",
+      "guidance": "Registration Act s.17 makes registration compulsory for these instruments; present within 4 months of execution (s.23).",
+      "source": []
+    },
+    {
+      "id": "declaration",
+      "title": "Declarations: no fraud, no coercion, facts true",
+      "keywords": [
+        "free (will|consent)",
+        "without (any )?(coercion|undue influence|pressure)",
+        "true and correct",
+        "not (a )?fraudulent|no fraud",
+        "sound (mind|disposition)"
+      ],
+      "severity": "medium",
+      "guidance": "Official formats (e.g. NGDRS Punjab) carry a no-fraud declaration with penal consequences under the Registration Act.",
+      "source": []
+    },
+    {
+      "id": "execution",
+      "title": "Place and date of execution; signatures",
+      "keywords": [
+        "executed (at|on)",
+        "(signed|sealed) (and delivered|by)",
+        "in witness whereof",
+        "this \\d+(st|nd|rd|th)? day of|dated (this )?\\w* ?day|\\bday of\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "two_witnesses",
+      "title": "Attested by at least two witnesses (mandatory)",
+      "keywords": [
+        "witness(es)?",
+        "attested",
+        "in the presence of"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.59: mortgage of Rs 100+ principal must be by registered instrument signed and attested by two witnesses (except deposit of title deeds).",
+      "source": []
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "notary_only",
+      "title": "Property transfer 'notarised' only / on plain paper",
+      "pattern": "(notari[sz]ed|on plain paper|on white paper|affidavit)[^.]{0,80}(sale|transfer|gift|mortgage|lease)",
+      "why": "Notarisation is not registration; immovable property transfers above the statutory limit need a registered, stamped instrument."
+    },
+    {
+      "id": "gpa_sale",
+      "title": "'GPA sale' / irrevocable GPA used as a transfer",
+      "pattern": "irrevocable (general )?power of attorney[^.]{0,120}(sell|sale|transfer|convey)|general power of attorney[^.]{0,80}(in lieu of|instead of) (sale|conveyance)",
+      "why": "Suraj Lamp v. State of Haryana (SC 2011): GPA/agreement/will sales do not convey title."
+    },
+    {
+      "id": "cash_large",
+      "title": "Large cash consideration",
+      "pattern": "(paid|payable|received)[^.]{0,40}\\bin cash\\b[^.]{0,60}(lakh|lac|crore)|cash of rs\\.? ?[\\d,]{7,}",
+      "why": "Cash receipts of Rs 20,000+ for immovable property are restricted under the Income-tax Act (ss.269SS/269ST); also undervaluation risk."
+    },
+    {
+      "id": "undervalue",
+      "title": "Consideration expressly lower than market/circle rate",
+      "pattern": "(lower|less) than (the )?(market|circle|ready ?reckoner|guidance) (value|rate)|show(n|ing)? (a )?lower (value|consideration)",
+      "why": "Undervaluation attracts stamp-duty deficiency, penalty and tax consequences."
+    },
+    {
+      "id": "blank_fields",
+      "title": "Unfilled placeholders in final document",
+      "pattern": "\\[(name|date|amount|address|survey|plot|area)[^\\]]*\\]|_{6,}|\\bXXXX+\\b",
+      "why": "Final deed should not contain blanks."
+    },
+    {
+      "id": "unregistered_clause",
+      "title": "Deed says it need not be registered",
+      "pattern": "(need|shall) not be registered|no need (to|for) regist|unregistered (deed|agreement) (is|shall be) (valid|binding)",
+      "why": "Compulsorily registrable instruments are not effective for transferring an interest without registration (Registration Act s.17, TPA s.54/107/123)."
+    },
+    {
+      "id": "clog",
+      "title": "Clog on redemption",
+      "pattern": "(shall|will) not (be )?(entitled|have the right) to redeem|right of redemption (is|shall be) (waived|extinguished|barred)",
+      "why": "A clog on the equity of redemption is void (once a mortgage, always a mortgage)."
+    }
+  ],
+  "benchmarks": [],
+  "disclaimer": "Checklist built from the cited central statutes and official state/NGDRS deed formats. Stamp duty rates, registration fees and some mandatory clauses are STATE-specific; verify with the State Registration & Stamps department. Not legal advice."
+}

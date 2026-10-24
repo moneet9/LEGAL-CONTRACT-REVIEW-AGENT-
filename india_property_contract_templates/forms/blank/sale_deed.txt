@@ -1,0 +1,62 @@
+[STAMP PAPER / E-STAMP: Non-judicial stamp paper or e-stamp certificate of the value required by the [STATE] Stamp Act. E-Stamp Certificate No./UIN: [UIN]  Date: [DATE]  Amount: Rs. [AMOUNT]]
+
+SALE DEED
+
+Registration particulars: Sub-Registrar Office [SUB-REGISTRAR OFFICE]; Village/Locality [VILLAGE/LOCALITY];
+Urban/Rural [URBAN OR RURAL]; Consideration Rs. [AMOUNT].
+
+THIS SALE DEED is executed at [PLACE] on this [DAY] day of [MONTH] [YEAR]
+
+BETWEEN
+[VENDOR NAME], S/o / D/o / W/o [FATHER OR SPOUSE NAME], aged about [AGE] years, resident of [ADDRESS],
+PAN [PAN], Aadhaar [AADHAAR] (hereinafter called the "VENDOR", which expression shall include his/her heirs,
+legal representatives, successors and assigns) of the ONE PART
+
+AND
+[VENDEE NAME], S/o / D/o / W/o [FATHER OR SPOUSE NAME], aged about [AGE] years, resident of [ADDRESS],
+PAN [PAN], Aadhaar [AADHAAR] (hereinafter called the "VENDEE", which expression shall include his/her heirs,
+legal representatives, successors and assigns) of the OTHER PART.
+
+WHEREAS the Vendor is the absolute owner in possession of the property described in the Schedule below
+(the "Property"), having acquired it by [MODE OF ACQUISITION, e.g. sale deed dated [DATE] vide document no. [NO]],
+and the chain of title documents have been examined by the Vendee.
+
+AND WHEREAS the Vendor has agreed to sell and the Vendee has agreed to purchase the Property for a total sale
+consideration of Rs. [AMOUNT] (Rupees [AMOUNT IN WORDS] only).
+
+NOW THIS DEED WITNESSETH AS FOLLOWS:
+
+1. In consideration of Rs. [AMOUNT] (Rupees [AMOUNT IN WORDS] only), paid by the Vendee to the Vendor by [MODE: cheque/RTGS/NEFT/demand draft]
+   no./UTR [INSTRUMENT OR UTR NO.] dated [DATE] drawn on [BANK], the receipt of which the Vendor hereby acknowledges,
+   the Vendor hereby sells, conveys, transfers and assigns absolutely and forever to the Vendee the Property described in the Schedule,
+   together with all rights, easements and appurtenances.
+2. The Vendor has delivered vacant, peaceful and physical possession of the Property to the Vendee on the date of this deed.
+3. The Vendor declares that he/she is the absolute owner with good and marketable title and full right and power to sell;
+   the Property is free from all encumbrances, charges, liens, mortgages, attachments, litigation and court stay;
+   no other person including any co-owner, spouse or legal heir has any right, claim or interest in the Property, and the consent of [CO-OWNERS/SPOUSE/HEIRS, IF ANY] has been obtained.
+4. The Vendor shall indemnify the Vendee against any defect in title, claim or loss arising from any act or omission of the Vendor,
+   and shall execute any further assurance reasonably required to perfect the title of the Vendee.
+5. All property tax, society/maintenance dues, electricity, water and other charges up to the date of this deed shall be borne by the Vendor
+   and thereafter by the Vendee.
+6. The Vendee shall be the absolute owner and entitled to use, enjoy, mutate, sell or otherwise deal with the Property.
+7. The stamp duty, registration fee and all expenses of this deed shall be borne by the Vendee.
+8. The Vendee shall deduct tax at source under section 194-IA of the Income-tax Act, 1961 where applicable and furnish Form 26QB.
+9. The Vendor declares that the Property is not connected with any religious or charitable institution and that this sale is not
+   fraudulent; the parties are aware of the consequences under the Registration Act, 1908, and that all particulars are true and correct,
+   made of their own free will without coercion or undue influence, being of sound mind.
+10. This deed shall be presented for registration before the Sub-Registrar having jurisdiction under the Registration Act, 1908.
+    The deed is governed by the laws of India and the courts at [PLACE] shall have jurisdiction.
+
+SCHEDULE OF PROPERTY
+Property: [DESCRIPTION, e.g. Flat No./Plot No. [NO], [SURVEY NO./KHASRA/CTS NO.]], situated at [ADDRESS],
+admeasuring [AREA] square feet / square metres; bounded as follows: North: [NORTH], South: [SOUTH], East: [EAST], West: [WEST].
+
+IN WITNESS WHEREOF the parties have signed this Sale Deed on the day, month and year first written above, in the presence of the witnesses.
+
+VENDOR: [SIGNATURE / THUMB IMPRESSION]     VENDEE: [SIGNATURE / THUMB IMPRESSION]
+
+WITNESSES (with address, ID and signature/thumb impression):
+1. [WITNESS 1 NAME, ADDRESS, ID]
+2. [WITNESS 2 NAME, ADDRESS, ID]
+
+Drafted by (if applicable): [DEED WRITER NAME AND LICENCE NO.]

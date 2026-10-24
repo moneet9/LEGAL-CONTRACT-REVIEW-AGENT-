@@ -1,0 +1,32 @@
+[STAMP PAPER / E-STAMP: Non-judicial stamp paper or e-stamp certificate of the value required by the [STATE] Stamp Act. E-Stamp Certificate No./UIN: [UIN]  Date: [DATE]  Amount: Rs. [AMOUNT]]
+
+MORTGAGE DEED (SIMPLE MORTGAGE)
+
+THIS MORTGAGE DEED is made at [PLACE] on this [DAY] day of [MONTH] [YEAR]
+
+BETWEEN
+[MORTGAGOR NAME], S/o / D/o / W/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN], Aadhaar [AADHAAR] (the "MORTGAGOR")
+AND
+[MORTGAGEE NAME], S/o [NAME] / [BANK OR COMPANY], resident of / having office at [ADDRESS], PAN [PAN] (the "MORTGAGEE").
+
+WHEREAS the Mortgagor is the absolute owner of the property described in the Schedule, with good title and the right to mortgage it,
+and has borrowed the principal sum of Rs. [AMOUNT] (Rupees [AMOUNT IN WORDS] only) from the Mortgagee.
+
+1. TYPE: This is a simple mortgage under section 58(b) of the Transfer of Property Act, 1882.
+2. PRINCIPAL AND INTEREST: The Mortgagor acknowledges receipt of the principal sum of Rs. [AMOUNT] and shall pay interest at the rate of [RATE]% per annum.
+3. REPAYMENT: The principal and interest shall be repaid in [NUMBER] instalments/EMIs of Rs. [AMOUNT] on or before the [DATE] of each month, and the entire dues shall be repaid on or before [DATE].
+4. MORTGAGOR'S COVENANTS: The Mortgagor shall preserve and maintain the property, keep it insured against fire, pay all taxes and dues,
+   and shall not create any further charge, mortgage or encumbrance on the property.
+5. TITLE DEEDS: The original title deeds of the property are deposited with the Mortgagee, who shall return them on redemption.
+6. DEFAULT AND REMEDIES: On default in repayment for [DAYS] days, the Mortgagee may, after notice, sell the mortgaged property through court or as permitted by law,
+   foreclose, or take possession, and apply the proceeds against the dues.
+7. REDEMPTION: The Mortgagor has the right of redemption, and on payment of all dues the Mortgagee shall release the mortgage and reconvey the property by executing a release deed.
+   Nothing in this deed fetters the right of redemption.
+8. The Mortgagor declares that the title is good, the property is free from other encumbrances and pending litigation, and all facts are true and correct and given of free will.
+9. Stamp duty is paid per the State Stamp Act and this deed shall be registered with the Sub-Registrar under the Registration Act, 1908.
+
+SCHEDULE: [DESCRIPTION, SURVEY/PLOT NO., ADDRESS, AREA, BOUNDARIES NORTH/SOUTH/EAST/WEST]
+
+IN WITNESS WHEREOF the parties have signed this Mortgage Deed on the date first written above, in the presence of the two attesting witnesses:
+MORTGAGOR: [SIGNATURE]   MORTGAGEE: [SIGNATURE]
+WITNESS 1 (attesting): [NAME, ADDRESS, SIGNATURE]   WITNESS 2 (attesting): [NAME, ADDRESS, SIGNATURE]

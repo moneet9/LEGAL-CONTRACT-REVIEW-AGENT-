@@ -1,0 +1,201 @@
+{
+  "id": "will",
+  "name": "Will / Testament (Indian Succession Act 1925)",
+  "applies_to": "Will / Testament (Indian Succession Act 1925)",
+  "detect_keywords": [
+    "\\bwill\\b",
+    "\\btestators?\\b|\\btestatrix\\b",
+    "bequeath",
+    "\\bexecutors?\\b",
+    "last will",
+    "revok(e|ing) all (previous|former|earlier)",
+    "legatee|beneficiar(y|ies)",
+    "after my death"
+  ],
+  "sources": [
+    {
+      "title": "Indian Succession Act, 1925",
+      "where": "https://www.indiacode.nic.in",
+      "key": "succ"
+    },
+    {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in",
+      "key": "reg"
+    },
+    {
+      "title": "Delhi Revenue Dept. model deeds (Sale, Agreement to Sell, Lease, Exchange, Will, GPA, Gift)",
+      "where": "https://dmeast.delhi.gov.in/model-deed-page/",
+      "key": "delhi"
+    }
+  ],
+  "required_clauses": [
+    {
+      "id": "testator",
+      "title": "Testator's name, age, address and religion/personal law",
+      "keywords": [
+        "testator|testatrix|i,? ",
+        "(aged|age) (about|of)?\\s*\\d+",
+        "resident of|r/o",
+        "hindu|muslim|christian|parsi|religion"
+      ],
+      "severity": "high",
+      "guidance": "Muslim wills are governed by personal law limits (1/3 rule) - flag for review.",
+      "source": []
+    },
+    {
+      "id": "sound_mind",
+      "title": "Declaration of sound mind and free will",
+      "keywords": [
+        "sound (mind|disposing|disposition)",
+        "free (will|consent)",
+        "without (any )?(coercion|undue influence|pressure)"
+      ],
+      "severity": "high",
+      "guidance": "Indian Succession Act s.59.",
+      "source": []
+    },
+    {
+      "id": "revocation",
+      "title": "Revocation of earlier wills",
+      "keywords": [
+        "revok(e|ing)[^.]{0,40}(previous|former|earlier|prior)",
+        "all (previous|earlier) wills?"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "properties",
+      "title": "Description of properties/assets bequeathed",
+      "keywords": [
+        "schedule",
+        "propert(y|ies)",
+        "(bank|account|shares?|jewellery|flat|plot|land)"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "bequests",
+      "title": "Beneficiaries and specific bequests",
+      "keywords": [
+        "bequeath",
+        "(give|devise|leave)[^.]{0,40}(to|unto)",
+        "beneficiar(y|ies)|legatee",
+        "absolutely"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "residuary",
+      "title": "Residuary clause",
+      "keywords": [
+        "residu(e|ary)",
+        "rest and remainder",
+        "any other property"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "executor",
+      "title": "Appointment of executor",
+      "keywords": [
+        "executors?",
+        "appoint"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "guardian_debts",
+      "title": "Debts, expenses and guardians (if minors)",
+      "keywords": [
+        "debts?",
+        "funeral",
+        "guardian",
+        "minor"
+      ],
+      "severity": "low",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "contingent",
+      "title": "Contingent / alternate beneficiaries",
+      "keywords": [
+        "predecease|alternate|in case (of )?(his|her|their) death|failing"
+      ],
+      "severity": "low",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "execution",
+      "title": "Place and date of execution; signatures",
+      "keywords": [
+        "executed (at|on)",
+        "(signed|sealed) (and delivered|by)",
+        "in witness whereof",
+        "this \\d+(st|nd|rd|th)? day of|dated (this )?\\w* ?day|\\bday of\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "two_witnesses",
+      "title": "Attested by two or more witnesses who saw the testator sign",
+      "keywords": [
+        "witness(es)?",
+        "attested",
+        "in (the|my) presence",
+        "each of us|we the (undersigned|witnesses)"
+      ],
+      "severity": "high",
+      "guidance": "Succession Act s.63(c): at least two witnesses, each seeing testator sign (or acknowledge signature) and signing in testator's presence.",
+      "source": []
+    },
+    {
+      "id": "registration_optional",
+      "title": "Registration (optional; improves evidential value)",
+      "keywords": [
+        "sub-?registrar",
+        "registered",
+        "deposit"
+      ],
+      "severity": "low",
+      "guidance": "",
+      "source": []
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "stamp_required_wrongly",
+      "title": "Will stamped as a conveyance",
+      "pattern": "will[^.]{0,60}stamp duty (paid|of)|stamp duty[^.]{0,40}(on|for) (this|the|my) will",
+      "why": "A will does not need stamp paper; check the document is really a will."
+    },
+    {
+      "id": "single_witness",
+      "title": "Only one witness named",
+      "pattern": "\\bone witness\\b|sole witness",
+      "why": "Two witnesses are required (s.63)."
+    },
+    {
+      "id": "blank_fields",
+      "title": "Unfilled placeholders in final document",
+      "pattern": "\\[(name|date|amount|address|survey|plot|area)[^\\]]*\\]|_{6,}|\\bXXXX+\\b",
+      "why": "Final deed should not contain blanks."
+    }
+  ],
+  "benchmarks": [],
+  "disclaimer": "Checklist built from the cited central statutes and official state/NGDRS deed formats. Stamp duty rates, registration fees and some mandatory clauses are STATE-specific; verify with the State Registration & Stamps department. Not legal advice."
+}

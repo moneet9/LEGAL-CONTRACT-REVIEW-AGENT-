@@ -30,14 +30,14 @@ def _chunk(cid, number, records):
     )
 
 
-def _split_paragraph(text):
-    if len(text) <= settings.chunk_size_chars:
+def _split_paragraph(text, chunk_size_chars):
+    if len(text) <= chunk_size_chars:
         return [text]
     pieces = [piece.strip() for piece in SENTENCE_RE.split(text) if piece.strip()]
     result = []
     current = ""
     for piece in pieces or [text]:
-        if current and len(current) + len(piece) + 1 > settings.chunk_size_chars:
+        if current and len(current) + len(piece) + 1 > chunk_size_chars:
             result.append(current)
             current = ""
         current = f"{current} {piece}".strip()
@@ -46,8 +46,10 @@ def _split_paragraph(text):
     return result
 
 
-def extract_and_chunk(pdf, cid):
-    if settings.chunk_overlap_chars >= settings.chunk_size_chars:
+def extract_and_chunk(pdf, cid, chunk_size_chars=None, chunk_overlap_chars=None):
+    chunk_size_chars = chunk_size_chars or settings.chunk_size_chars
+    chunk_overlap_chars = chunk_overlap_chars or settings.chunk_overlap_chars
+    if chunk_overlap_chars >= chunk_size_chars:
         raise ValueError("CHUNK_OVERLAP_CHARS must be smaller than CHUNK_SIZE_CHARS")
     doc = fitz.open(stream=pdf, filetype="pdf")
     pages = [(index + 1, page.get_text("text").strip()) for index, page in enumerate(doc)]
@@ -72,18 +74,18 @@ def extract_and_chunk(pdf, cid):
             match = CLAUSE_RE.match(normalized)
             if match and not (len(match.group(1)) == 4 and match.group(1).startswith("20")):
                 active_clause, active_heading = match.group(1), match.group(2)[:140]
-            for piece in _split_paragraph(normalized):
+            for piece in _split_paragraph(normalized, chunk_size_chars):
                 record = {
                     "page": page,
                     "clause": active_clause,
                     "heading": active_heading,
                     "text": piece,
                 }
-                if current and sum(len(item["text"]) for item in current) + len(piece) + 2 > settings.chunk_size_chars:
+                if current and sum(len(item["text"]) for item in current) + len(piece) + 2 > chunk_size_chars:
                     previous_text = "\n\n".join(item["text"] for item in current)
                     previous_record = current[-1]
                     flush()
-                    overlap = previous_text[-settings.chunk_overlap_chars:]
+                    overlap = previous_text[-chunk_overlap_chars:]
                     overlap = overlap[overlap.find(" ") + 1:] if " " in overlap else overlap
                     if overlap:
                         current.append({

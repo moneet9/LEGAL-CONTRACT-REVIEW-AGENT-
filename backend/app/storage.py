@@ -76,4 +76,10 @@ class LocalStore:
     def audit(self,event):
         event={**event,"timestamp":datetime.now(timezone.utc).isoformat()}
         with (self.root/"audit"/"events.jsonl").open("a",encoding="utf-8") as f: f.write(json.dumps(event)+"\n")
+    def save_graph(self, cid, graph):
+        (self.root/"indexes"/f"{cid}.graph.json").write_text(json.dumps(graph, ensure_ascii=False), encoding="utf-8")
+    def load_graph(self, cid):
+        path = self.root/"indexes"/f"{cid}.graph.json"
+        if not path.exists(): return None
+        return json.loads(path.read_text(encoding="utf-8"))
 store=LocalStore()

@@ -13,7 +13,7 @@ class HybridRetriever:
         "to", "what", "when", "where", "who", "with",
     }
 
-    def __init__(self, chunks, vectors=None, root=None, embed_query=None, contract_id=None):
+    def __init__(self, chunks, vectors=None, root=None, embed_query=None, contract_id=None, retrieval_config=None):
         self.chunks = chunks
         self.root = root
         self.tokens = [re.findall(r"\w+", chunk.text.lower()) for chunk in chunks]
@@ -28,15 +28,17 @@ class HybridRetriever:
                 self._cache[self.contract_id] = (chunk_ids, self.bm25)
         self.vectors = vectors
         self.embed_query = embed_query
+        self.retrieval_config = retrieval_config or {}
 
     def search(self, query, top_k=8):
         q = {word for word in re.findall(r"\w+", query.lower()) if word not in self.STOPWORDS}
         lexical = []
         if self.bm25 and q:
             lexical_scores = self.bm25.get_scores(list(q))
+            lexical_k = int(self.retrieval_config.get("top_k_bm25", settings.top_k_bm25))
             lexical = [
                 int(index)
-                for index in np.argsort(lexical_scores)[::-1][:settings.top_k_bm25]
+                for index in np.argsort(lexical_scores)[::-1][:lexical_k]
                 if lexical_scores[index] > 0
             ]
         semantic = []
@@ -44,7 +46,7 @@ class HybridRetriever:
             ids = vector_search(
                 self.contract_id,
                 self.embed_query(query),
-                min(settings.top_k_vector, len(self.chunks)),
+                min(int(self.retrieval_config.get("top_k_vector", settings.top_k_vector)), len(self.chunks)),
             )
             positions = {chunk.chunk_id: index for index, chunk in enumerate(self.chunks)}
             semantic = [positions[chunk_id] for chunk_id in ids if chunk_id in positions]

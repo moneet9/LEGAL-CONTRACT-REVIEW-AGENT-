@@ -2,13 +2,41 @@
 .message-body p{white-space:pre-wrap;overflow-wrap:anywhere}
 .app{height:100vh;overflow:hidden}.shell{height:calc(100vh - 66px);min-height:0;overflow:hidden}.shell>main{min-width:0;min-height:0;height:100%}.contracts{height:100%;overflow-y:auto}.chat-layout{height:100%;min-height:0;overflow:hidden}.chat-column{height:100%;min-height:0;display:flex;flex-direction:column;overflow:hidden}.chat-heading{flex:0 0 auto}.analysis-popover{flex:0 0 auto}.messages{min-height:0;flex:1 1 auto;overflow-y:auto}.composer{flex:0 0 auto}.report-rail{height:100%;min-height:0;overflow-y:auto}
 .analysis-progress{margin:16px 0;padding:10px 0;color:#6d7b74;font-size:10px}.analysis-progress strong{font-weight:600}.analysis-progress>span{float:right;color:#23826d}.analysis-progress>div{height:4px;margin-top:8px;background:#e6eee9;border-radius:4px;overflow:hidden}.analysis-progress i{display:block;height:100%;background:#3da886;border-radius:4px;transition:width .3s ease}
-.composer-context{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding-top:10px}.composer-context input{border:1px solid #dce7df;border-radius:8px;padding:11px 12px;font-size:14px;min-height:42px}.contract-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}.contract-row>input{accent-color:#287e6a;width:18px;height:18px}.contract-row .contract{flex:1}.message-body a,.evidence-row a{color:#287e6a;text-decoration:underline}.message-body h1,.message-body h2,.message-body h3{font-family:'Source Serif 4';color:#315548}.message-body ul,.message-body ol{padding-left:22px}.message-body li{margin:4px 0}
-@media (max-width:800px){.composer-context{grid-template-columns:repeat(2,1fr)}}
+.contract-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}.contract-row>input{accent-color:#287e6a;width:18px;height:18px}.contract-row .contract{flex:1}.message-body a,.evidence-row a{color:#287e6a;text-decoration:underline}.message-body h1,.message-body h2,.message-body h3{font-family:'Source Serif 4';color:#315548}.message-body ul,.message-body ol{padding-left:22px}.message-body li{margin:4px 0}
 button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #8bcdb7;outline-offset:2px}
 /* Keep secondary UI text readable at normal browser zoom. */
 .eyebrow,.status,.analysis-model,.analysis-model select,.analysis-error,.composer-meta,.composer-meta select,.contract small,.drop-mini small,.side-title,.empty,.suggestions button,.source-link,.typing,.analysis-title b,.evidence-row>span{font-size:14px}
-.new,.primary,.analysis-button,.document-link,.queued,.contract b,.message-body p,.composer input,.composer-context input,.analysis-title,.evidence-row b,.evidence-row p{font-size:15px}
+.new,.primary,.analysis-button,.document-link,.queued,.contract b,.message-body p,.composer input,.analysis-title,.evidence-row b,.evidence-row p{font-size:15px}
 .product{font-size:15px}
+
+/* Keep contract names and actions in separate, predictable columns. */
+.chat-heading{min-width:0}
+.chat-title{min-width:0;flex:1 1 320px}
+.chat-heading h1{max-width:100%;overflow-wrap:anywhere}
+.chat-actions{max-width:48%;flex-wrap:wrap;justify-content:flex-end}
+.chat-actions>*{white-space:nowrap}
+.chat-title p{line-height:1.5}
+.queued{padding:14px;border-radius:11px;box-shadow:0 6px 18px rgba(34,75,61,.06)}
+.queued-count{font-size:12px;font-weight:700;color:#395f50}
+.upload-model{font-size:12px;font-weight:600}
+.upload-model select{min-height:40px;border-radius:8px;padding:8px 10px;font-size:12px}
+.queued button{min-height:42px;border-radius:8px;font-size:13px;font-weight:700}
+.queued button:disabled{opacity:.65;cursor:wait}
+.model-hint{font-size:11px;line-height:1.45}
+.score-explainer{margin:10px 0 0;color:#7a8d84;font-size:11px;line-height:1.55}
+.retry-review{width:100%;margin-top:10px;padding:10px 12px;border:1px solid #e7cfc4;border-radius:8px;background:#fff8f5;color:#9b573c;font-size:12px;font-weight:700}
+.retry-review:hover{background:#fff0e9}
+.template-score-note{margin-top:6px;color:#8c806d!important}
+.report-empty{padding:28px 10px}
+.composer{padding:13px 16px}
+.composer-top{gap:12px}
+.composer-top input{font-size:15px}
+.composer-meta{gap:10px;flex-wrap:wrap}
+.composer-meta>span{line-height:1.4}
+.composer-meta label{gap:8px;color:#74877e;font-weight:600}
+.composer-meta select{max-width:220px;min-height:34px;padding:4px 8px;border-radius:7px;background:#f5f9f6;font-size:12px}
+@media(max-width:1100px){.chat-actions{max-width:44%}.chat-heading{gap:12px}.analysis-button,.document-link{padding:9px 10px}}
+@media(max-width:800px){.chat-heading{display:flex;flex-direction:column;align-items:stretch}.chat-actions{max-width:100%;justify-content:flex-start}.chat-title{flex-basis:auto}.chat-heading h1{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.composer-meta{align-items:flex-start}}
 
 /* Comfortable, card-based density for desktop and laptop screens. */
 header{height:78px;padding:0 34px;gap:30px}.shell{grid-template-columns:310px minmax(0,1fr);min-height:calc(100vh - 78px)}.chat-layout{grid-template-columns:minmax(0,1fr) 420px;min-height:calc(100vh - 78px)}.chat-column{max-width:1000px;padding:52px 56px 36px;min-height:calc(100vh - 78px)}.contracts{padding:30px 20px}.drop-mini{padding:24px 16px;border-radius:12px;gap:9px}.drop-mini strong{font-size:15px}.drop-mini small{font-size:13px}.side-title{font-size:14px;padding:0 12px;margin-bottom:18px}.recent{margin-top:36px}.contract{padding:16px 12px;border-radius:10px;gap:12px}.contract b{font-size:15px}.contract small{font-size:13px;margin-top:6px}.chat-heading{padding-bottom:32px}.chat-heading h1{font-size:38px;margin:10px 0 8px}.chat-heading p{font-size:15px}.chat-actions{gap:12px}.analysis-button,.document-link{padding:12px 15px;border-radius:8px;font-size:14px}.messages{padding:18px 8px 28px}.message{gap:14px;margin:30px 0;max-width:900px}.avatar{width:38px;height:38px;border-radius:11px;font-size:13px}.message-body p{font-size:16px;line-height:1.8}.message.user .message-body{padding:14px 18px;border-radius:15px 5px 15px 15px}.source-link{font-size:13px;padding-top:10px}.composer{padding:14px 16px;border-radius:14px}.composer-top input{padding:12px 5px;font-size:16px}.composer-top button{width:42px;height:42px;border-radius:9px}.composer-meta{font-size:13px;padding-top:10px}.composer select{font-size:13px}.report-rail{padding:34px 28px}.report-head h2{font-size:25px}.report-score{font-size:28px}.analysis-model{font-size:14px;gap:9px;margin:20px 0}.analysis-model select{padding:11px;font-size:14px}.risk-strip{gap:12px}.risk-strip>div{padding:16px 10px;border-radius:9px}.risk-strip strong{font-size:22px}.risk-strip small{font-size:13px}.risk-item{padding:18px 0}.risk-item h3{font-size:17px;line-height:1.4}.risk-item p{font-size:14px;line-height:1.6}.run-review{padding:14px;font-size:15px}.analysis-popover{padding:18px;margin-bottom:12px}.analysis-title{font-size:15px;margin-bottom:12px}.evidence-row{gap:12px;padding:14px 0}.evidence-row>span{width:26px;height:26px;font-size:13px}.evidence-row b{font-size:14px}.evidence-row p{font-size:14px;line-height:1.6}.welcome h1{font-size:64px}.welcome p{font-size:16px}.primary{padding:14px 20px;font-size:15px}

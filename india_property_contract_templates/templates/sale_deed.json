@@ -1,0 +1,332 @@
+{
+  "id": "sale_deed",
+  "name": "Sale Deed (conveyance of immovable property)",
+  "applies_to": "Sale Deed (conveyance of immovable property)",
+  "detect_keywords": [
+    "sale deed",
+    "hereby sells?\\b",
+    "\\bvendors?\\b",
+    "\\bvendees?\\b",
+    "hereby (sells?|conveys?|transfers?)",
+    "absolute owner",
+    "\\bconsideration\\b",
+    "sells?,? conveys?",
+    "purchaser",
+    "seller"
+  ],
+  "sources": [
+    {
+      "title": "Transfer of Property Act, 1882",
+      "where": "https://www.indiacode.nic.in",
+      "key": "tpa"
+    },
+    {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in",
+      "key": "reg"
+    },
+    {
+      "title": "Indian Stamp Act, 1899 (+ each State's Stamp Act/Schedule)",
+      "where": "https://www.indiacode.nic.in and the State IGR/Stamps dept.",
+      "key": "stamp"
+    },
+    {
+      "title": "NGDRS state deed templates (e.g. Punjab Sale Deed template)",
+      "where": "https://ngdrs.gov.in",
+      "key": "ngdrs"
+    },
+    {
+      "title": "Delhi Revenue Dept. model deeds (Sale, Agreement to Sell, Lease, Exchange, Will, GPA, Gift)",
+      "where": "https://dmeast.delhi.gov.in/model-deed-page/",
+      "key": "delhi"
+    },
+    {
+      "title": "Suraj Lamp & Industries v. State of Haryana (SC, 2011) - GPA/SA/Will 'sales' are not valid conveyances",
+      "where": "Supreme Court of India",
+      "key": "suraj"
+    }
+  ],
+  "required_clauses": [
+    {
+      "id": "parties",
+      "title": "Parties with full names, parentage/address and capacity",
+      "keywords": [
+        "s/o|d/o|w/o|son of|daughter of|wife of",
+        "resident of|r/o|residing at",
+        "hereinafter (called|referred)",
+        "aged about|major"
+      ],
+      "severity": "high",
+      "guidance": "Names, father/spouse name, age, address. Parties must be majors of sound mind (Contract Act s.11).",
+      "source": []
+    },
+    {
+      "id": "party_ids",
+      "title": "Party identity proofs (PAN / Aadhaar)",
+      "keywords": [
+        "\\bPAN\\b",
+        "aadhaar|aadhar",
+        "identity (proof|card)",
+        "photo ?id"
+      ],
+      "severity": "medium",
+      "guidance": "PAN is required on high-value immovable property transactions; many states also record Aadhaar.",
+      "source": []
+    },
+    {
+      "id": "recital_title",
+      "title": "Recital of vendor's title / chain of title",
+      "keywords": [
+        "absolute owner",
+        "title (deeds?|documents?)",
+        "chain of title",
+        "(inherit|acquired|purchased|allotted)[^.]{0,60}(vide|by way of|under)",
+        "sale deed dated|vide (registered )?(deed|document)"
+      ],
+      "severity": "high",
+      "guidance": "State how the seller acquired the property.",
+      "source": []
+    },
+    {
+      "id": "property",
+      "title": "Property description (schedule, survey/plot no., area, boundaries)",
+      "keywords": [
+        "schedule",
+        "survey (no|number)|khasra|khewat|cts no|plot no|flat no|gat no",
+        "bounded (by|as follows)|north|east|south|west",
+        "(square|sq\\.?) ?(feet|ft|yards?|metres?|meters?)|area (of|admeasuring)|admeasuring"
+      ],
+      "severity": "high",
+      "guidance": "Unambiguous identification of the property is essential for registration.",
+      "source": []
+    },
+    {
+      "id": "consideration",
+      "title": "Sale consideration in figures and words",
+      "keywords": [
+        "consideration",
+        "sum of rs\\.?|rupees",
+        "\\(rupees [^)]*only\\)|in words"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.54: sale is transfer of ownership in exchange for a price paid or promised.",
+      "source": []
+    },
+    {
+      "id": "payment_receipt",
+      "title": "Mode of payment and acknowledgement of receipt",
+      "keywords": [
+        "cheque|demand draft|\\bRTGS\\b|\\bNEFT\\b|\\bUTR\\b|bank transfer|\\bUPI\\b",
+        "receipt (of which|whereof)|hereby acknowledges? (the )?receipt|received (the )?(full|entire)"
+      ],
+      "severity": "high",
+      "guidance": "NGDRS Punjab format records mode, instrument no. and date of each payment.",
+      "source": []
+    },
+    {
+      "id": "operative_words",
+      "title": "Operative words of transfer",
+      "keywords": [
+        "hereby (sells?|conveys?|transfers?|grants?|assigns?)",
+        "absolute(ly)?",
+        "forever|in perpetuity|free of all"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "possession",
+      "title": "Delivery of possession",
+      "keywords": [
+        "possession",
+        "(delivered|handed over|delivering)[^.]{0,60}possession"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "no_encumbrance",
+      "title": "Property free from encumbrance, litigation and charges",
+      "keywords": [
+        "free from (all )?(encumbrances?|charges?|liens?|mortgages?|attachments?)",
+        "no (pending )?(litigation|court|stay)",
+        "not subject to any (charge|lien|claim)",
+        "encumbrance"
+      ],
+      "severity": "high",
+      "guidance": "NGDRS Punjab format has seller declarations on no stay, no encumbrance, no religious/charitable link.",
+      "source": []
+    },
+    {
+      "id": "title_covenants",
+      "title": "Seller's covenants: good title, indemnity, further assurance",
+      "keywords": [
+        "good (right|title)|full (power|right)|marketable title",
+        "indemnif",
+        "quiet (and peaceful )?(possession|enjoyment)",
+        "further assurance|execute (any )?further"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.55(1)-(2) implied covenants; sellers commonly indemnify against defects.",
+      "source": []
+    },
+    {
+      "id": "dues_taxes",
+      "title": "Apportionment of taxes, society/maintenance dues, utility bills",
+      "keywords": [
+        "property tax|municipal tax",
+        "society|maintenance charges|association",
+        "electricity|water (charges|bill)",
+        "up ?to (and including )?the date"
+      ],
+      "severity": "medium",
+      "guidance": "TPA s.55(1)(g): seller bears public charges up to the sale.",
+      "source": []
+    },
+    {
+      "id": "co_owner_consent",
+      "title": "Consent of spouse / co-owners / legal heirs",
+      "keywords": [
+        "consent of",
+        "co-?owners?",
+        "legal heirs?",
+        "\\bHUF\\b|joint family",
+        "no other person has any (right|claim|interest)"
+      ],
+      "severity": "medium",
+      "guidance": "Missing consent of co-owners/heirs is a common title defect.",
+      "source": []
+    },
+    {
+      "id": "expenses",
+      "title": "Responsibility for stamp duty, registration and deed expenses",
+      "keywords": [
+        "(stamp duty|registration (fee|charges?)|expenses)[^.]{0,80}(borne|paid|payable) by"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "tds",
+      "title": "TDS on purchase of immovable property (s.194-IA) if consideration > Rs 50 lakh",
+      "keywords": [
+        "194[- ]?IA",
+        "\\bTDS\\b|tax deducted at source",
+        "form 26QB"
+      ],
+      "severity": "low",
+      "guidance": "Buyer deducts 1% TDS where consideration/stamp value exceeds Rs 50 lakh.",
+      "source": []
+    },
+    {
+      "id": "stamp",
+      "title": "Stamp duty paid (e-stamp / stamp paper details)",
+      "keywords": [
+        "stamp duty",
+        "e-?stamp",
+        "stamp paper",
+        "\\bUIN\\b|certificate (no|number)|franking",
+        "adjudicat"
+      ],
+      "severity": "high",
+      "guidance": "Instrument must be stamped as per the State Stamp Act before/at execution; unstamped documents are inadmissible until duty and penalty are paid.",
+      "source": []
+    },
+    {
+      "id": "registration",
+      "title": "Registration particulars (Sub-Registrar, Registration Act)",
+      "keywords": [
+        "sub-?registrar",
+        "registration act",
+        "registered",
+        "presented for registration"
+      ],
+      "severity": "high",
+      "guidance": "Registration Act s.17 makes registration compulsory for these instruments; present within 4 months of execution (s.23).",
+      "source": []
+    },
+    {
+      "id": "declaration",
+      "title": "Declarations: no fraud, no coercion, facts true",
+      "keywords": [
+        "free (will|consent)",
+        "without (any )?(coercion|undue influence|pressure)",
+        "true and correct",
+        "not (a )?fraudulent|no fraud",
+        "sound (mind|disposition)"
+      ],
+      "severity": "medium",
+      "guidance": "Official formats (e.g. NGDRS Punjab) carry a no-fraud declaration with penal consequences under the Registration Act.",
+      "source": []
+    },
+    {
+      "id": "execution",
+      "title": "Place and date of execution; signatures",
+      "keywords": [
+        "executed (at|on)",
+        "(signed|sealed) (and delivered|by)",
+        "in witness whereof",
+        "this \\d+(st|nd|rd|th)? day of|dated (this )?\\w* ?day|\\bday of\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "witnesses",
+      "title": "Signatures and attestation by two witnesses",
+      "keywords": [
+        "witness(es)?",
+        "in the presence of",
+        "attested",
+        "thumb impression"
+      ],
+      "severity": "high",
+      "guidance": "Two attesting witnesses are mandatory for gift, mortgage and will; customary/State-required for others.",
+      "source": []
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "notary_only",
+      "title": "Property transfer 'notarised' only / on plain paper",
+      "pattern": "(notari[sz]ed|on plain paper|on white paper|affidavit)[^.]{0,80}(sale|transfer|gift|mortgage|lease)",
+      "why": "Notarisation is not registration; immovable property transfers above the statutory limit need a registered, stamped instrument."
+    },
+    {
+      "id": "gpa_sale",
+      "title": "'GPA sale' / irrevocable GPA used as a transfer",
+      "pattern": "irrevocable (general )?power of attorney[^.]{0,120}(sell|sale|transfer|convey)|general power of attorney[^.]{0,80}(in lieu of|instead of) (sale|conveyance)",
+      "why": "Suraj Lamp v. State of Haryana (SC 2011): GPA/agreement/will sales do not convey title."
+    },
+    {
+      "id": "cash_large",
+      "title": "Large cash consideration",
+      "pattern": "(paid|payable|received)[^.]{0,40}\\bin cash\\b[^.]{0,60}(lakh|lac|crore)|cash of rs\\.? ?[\\d,]{7,}",
+      "why": "Cash receipts of Rs 20,000+ for immovable property are restricted under the Income-tax Act (ss.269SS/269ST); also undervaluation risk."
+    },
+    {
+      "id": "undervalue",
+      "title": "Consideration expressly lower than market/circle rate",
+      "pattern": "(lower|less) than (the )?(market|circle|ready ?reckoner|guidance) (value|rate)|show(n|ing)? (a )?lower (value|consideration)",
+      "why": "Undervaluation attracts stamp-duty deficiency, penalty and tax consequences."
+    },
+    {
+      "id": "blank_fields",
+      "title": "Unfilled placeholders in final document",
+      "pattern": "\\[(name|date|amount|address|survey|plot|area)[^\\]]*\\]|_{6,}|\\bXXXX+\\b",
+      "why": "Final deed should not contain blanks."
+    },
+    {
+      "id": "unregistered_clause",
+      "title": "Deed says it need not be registered",
+      "pattern": "(need|shall) not be registered|no need (to|for) regist|unregistered (deed|agreement) (is|shall be) (valid|binding)",
+      "why": "Compulsorily registrable instruments are not effective for transferring an interest without registration (Registration Act s.17, TPA s.54/107/123)."
+    }
+  ],
+  "benchmarks": [],
+  "disclaimer": "Checklist built from the cited central statutes and official state/NGDRS deed formats. Stamp duty rates, registration fees and some mandatory clauses are STATE-specific; verify with the State Registration & Stamps department. Not legal advice."
+}

@@ -35,7 +35,13 @@ def available_models() -> list[dict[str, str]]:
                 if name and not any(marker in name for marker in unsupported) and (not actions or "generateContent" in actions):
                     models.append({"id": name, "name": name, "provider": "Google"})
         except Exception:
+            # Model-catalog access can fail even when the configured model is usable
+            # (for example, restricted outbound networking). Keep the configured
+            # model selectable and let generation report any real auth/API failure.
             pass
+        configured = settings.gemini_model.strip()
+        if configured and not any(item["id"] == configured for item in models):
+            models.append({"id": configured, "name": f"{configured} (configured)", "provider": "Google"})
     try:
         response = httpx.get(f"{settings.ollama_base_url}/api/tags", timeout=1.5)
         response.raise_for_status()

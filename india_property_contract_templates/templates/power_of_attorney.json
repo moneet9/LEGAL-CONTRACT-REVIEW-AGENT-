@@ -1,0 +1,237 @@
+{
+  "id": "power_of_attorney",
+  "name": "Power of Attorney (general or special)",
+  "applies_to": "Power of Attorney (general or special)",
+  "detect_keywords": [
+    "power of attorney",
+    "\\battorney\\b",
+    "\\bprincipal\\b",
+    "\\bexecutant\\b",
+    "constitut(e|ed|es) (and appoint|my)",
+    "true and lawful attorney",
+    "ratify|ratifies",
+    "revok(e|ed|ation)"
+  ],
+  "sources": [
+    {
+      "title": "Powers of Attorney Act, 1882",
+      "where": "https://www.indiacode.nic.in",
+      "key": "poa"
+    },
+    {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in",
+      "key": "reg"
+    },
+    {
+      "title": "Indian Stamp Act, 1899 (+ each State's Stamp Act/Schedule)",
+      "where": "https://www.indiacode.nic.in and the State IGR/Stamps dept.",
+      "key": "stamp"
+    },
+    {
+      "title": "Suraj Lamp & Industries v. State of Haryana (SC, 2011) - GPA/SA/Will 'sales' are not valid conveyances",
+      "where": "Supreme Court of India",
+      "key": "suraj"
+    },
+    {
+      "title": "Delhi Revenue Dept. model deeds (Sale, Agreement to Sell, Lease, Exchange, Will, GPA, Gift)",
+      "where": "https://dmeast.delhi.gov.in/model-deed-page/",
+      "key": "delhi"
+    }
+  ],
+  "required_clauses": [
+    {
+      "id": "parties",
+      "title": "Parties with full names, parentage/address and capacity",
+      "keywords": [
+        "s/o|d/o|w/o|son of|daughter of|wife of",
+        "resident of|r/o|residing at",
+        "hereinafter (called|referred)",
+        "aged about|major"
+      ],
+      "severity": "high",
+      "guidance": "Names, father/spouse name, age, address. Parties must be majors of sound mind (Contract Act s.11).",
+      "source": []
+    },
+    {
+      "id": "party_ids",
+      "title": "Party identity proofs (PAN / Aadhaar)",
+      "keywords": [
+        "\\bPAN\\b",
+        "aadhaar|aadhar",
+        "identity (proof|card)",
+        "photo ?id"
+      ],
+      "severity": "medium",
+      "guidance": "PAN is required on high-value immovable property transactions; many states also record Aadhaar.",
+      "source": []
+    },
+    {
+      "id": "appointment",
+      "title": "Appointment of attorney",
+      "keywords": [
+        "appoint",
+        "constitut",
+        "true and lawful attorney"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "scope_powers",
+      "title": "Specific enumerated powers",
+      "keywords": [
+        "(power|authority) to",
+        "(sign|execute|present|appear|represent|collect|pay|file|manage|lease|mortgage|sell)",
+        "on (my|our) behalf"
+      ],
+      "severity": "high",
+      "guidance": "A general POA should still enumerate powers; special POA should name the exact act and property.",
+      "source": []
+    },
+    {
+      "id": "property_if_any",
+      "title": "Property/subject matter described (if special POA)",
+      "keywords": [
+        "schedule",
+        "property",
+        "survey|plot|flat|account|case no"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "duration_revocation",
+      "title": "Duration / revocation / death clause",
+      "keywords": [
+        "revoc(ation|able)|revoke",
+        "irrevocable",
+        "valid (until|till|for)",
+        "death|insolvency|unsound"
+      ],
+      "severity": "high",
+      "guidance": "Powers of Attorney Act s.201 Contract Act: agency ends on revocation/death.",
+      "source": []
+    },
+    {
+      "id": "no_consideration_sale",
+      "title": "Not coupled with interest/sale of property (check)",
+      "keywords": [
+        "coupled with (an )?interest",
+        "no (consideration|interest) (has been )?(paid|created)"
+      ],
+      "severity": "low",
+      "guidance": "Suraj Lamp: a GPA cannot itself transfer title.",
+      "source": []
+    },
+    {
+      "id": "ratification",
+      "title": "Ratification of acts done",
+      "keywords": [
+        "ratif",
+        "confirm(s)? all acts"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "attorney_acceptance",
+      "title": "Attorney's acceptance / specimen signature",
+      "keywords": [
+        "accept",
+        "specimen signature"
+      ],
+      "severity": "low",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "accountability",
+      "title": "Accountability / rendering accounts",
+      "keywords": [
+        "account(s|ability)",
+        "render"
+      ],
+      "severity": "low",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "stamp",
+      "title": "Stamp duty paid (e-stamp / stamp paper details)",
+      "keywords": [
+        "stamp duty",
+        "e-?stamp",
+        "stamp paper",
+        "\\bUIN\\b|certificate (no|number)|franking",
+        "adjudicat"
+      ],
+      "severity": "high",
+      "guidance": "Instrument must be stamped as per the State Stamp Act before/at execution; unstamped documents are inadmissible until duty and penalty are paid.",
+      "source": []
+    },
+    {
+      "id": "authentication",
+      "title": "Notarisation / registration / apostille as required",
+      "keywords": [
+        "notar(y|i[sz]ed)",
+        "registered|sub-?registrar",
+        "apostille|consulate|embassy"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "execution",
+      "title": "Place and date of execution; signatures",
+      "keywords": [
+        "executed (at|on)",
+        "(signed|sealed) (and delivered|by)",
+        "in witness whereof",
+        "this \\d+(st|nd|rd|th)? day of|dated (this )?\\w* ?day|\\bday of\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "witnesses",
+      "title": "Signatures and attestation by two witnesses",
+      "keywords": [
+        "witness(es)?",
+        "in the presence of",
+        "attested",
+        "thumb impression"
+      ],
+      "severity": "high",
+      "guidance": "Two attesting witnesses are mandatory for gift, mortgage and will; customary/State-required for others.",
+      "source": []
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "gpa_sale",
+      "title": "'GPA sale' / irrevocable GPA used as a transfer",
+      "pattern": "irrevocable (general )?power of attorney[^.]{0,120}(sell|sale|transfer|convey)|general power of attorney[^.]{0,80}(in lieu of|instead of) (sale|conveyance)",
+      "why": "Suraj Lamp v. State of Haryana (SC 2011): GPA/agreement/will sales do not convey title."
+    },
+    {
+      "id": "unlimited_gpa",
+      "title": "Unlimited authority including sale of all property without limit",
+      "pattern": "(all|any) (my )?(movable and immovable )?propert(y|ies)[^.]{0,80}(sell|transfer|mortgage)[^.]{0,80}(without (any )?(limit|restriction)|absolute)",
+      "why": "Overbroad authority is a fraud risk; limit powers to specific property."
+    },
+    {
+      "id": "blank_fields",
+      "title": "Unfilled placeholders",
+      "pattern": "\\[(name|date|amount|address|survey|plot|area)[^\\]]*\\]|_{6,}|\\bXXXX+\\b",
+      "why": "Final deed should not contain blanks."
+    }
+  ],
+  "benchmarks": [],
+  "disclaimer": "Checklist built from the cited central statutes and official state/NGDRS deed formats. Stamp duty rates, registration fees and some mandatory clauses are STATE-specific; verify with the State Registration & Stamps department. Not legal advice."
+}

@@ -1,5 +1,8 @@
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
 class Settings(BaseSettings):
     gemini_api_key: str | None = None
     gemini_model: str = "gemini-flash-lite-latest"
@@ -16,5 +19,5 @@ class Settings(BaseSettings):
     max_retries: int = 2
     review_context_chars: int = 500000
     top_k_bm25: int = 30; top_k_vector: int = 30; top_k_rerank: int = 8
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="", extra="ignore")
+    model_config = SettingsConfigDict(env_file=PROJECT_ROOT / ".env", env_prefix="", extra="ignore")
 settings = Settings()

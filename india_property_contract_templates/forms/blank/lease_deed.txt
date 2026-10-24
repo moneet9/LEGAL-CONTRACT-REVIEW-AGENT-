@@ -1,0 +1,36 @@
+[STAMP PAPER / E-STAMP: Non-judicial stamp paper or e-stamp certificate of the value required by the [STATE] Stamp Act. E-Stamp Certificate No./UIN: [UIN]  Date: [DATE]  Amount: Rs. [AMOUNT]]
+
+LEASE DEED
+
+THIS LEASE DEED is made at [PLACE] on this [DAY] day of [MONTH] [YEAR]
+
+BETWEEN
+[LESSOR NAME], S/o / D/o / W/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN] (the "LESSOR")
+AND
+[LESSEE NAME], S/o / D/o / W/o [NAME], aged about [AGE] years, resident of [ADDRESS], PAN [PAN] (the "LESSEE").
+
+WHEREAS the Lessor is the absolute owner of the property described in the Schedule (the "Demised Premises") with good title and the right to lease,
+and the Lessee has agreed to take it on lease.
+
+1. DEMISE: The Lessor hereby demises and leases the Demised Premises to the Lessee for a term of [NUMBER] years commencing from [DATE] (the "Term").
+2. RENT AND PREMIUM: The Lessee shall pay a premium of Rs. [AMOUNT] (if any) and yearly/monthly rent of Rs. [AMOUNT] payable in advance by the [DATE] of each [MONTH/YEAR].
+3. ESCALATION: The rent shall be enhanced by [PERCENT]% every [NUMBER] years.
+4. RENEWAL: The Lessee has the option to renew for a further term of [NUMBER] years on written notice [DAYS] days before expiry, on terms to be agreed.
+5. USE: The Demised Premises shall be used only for [PURPOSE]; the Lessee shall not carry on any unlawful or objectionable activity.
+6. LESSOR'S COVENANTS: The Lessor covenants that he has good title and the right to grant this lease, that the Lessee, paying the rent and observing the covenants, shall enjoy quiet and peaceful possession,
+   and that the Lessor shall pay all property taxes and public charges on the Demised Premises.
+7. LESSEE'S COVENANTS: The Lessee shall pay the rent, keep the premises in good repair, pay utilities, use the premises only for the permitted purpose,
+   and on expiry yield up and restore possession in good condition.
+8. IMPROVEMENTS AND INSURANCE: The Lessee may make improvements/construction only with the Lessor's written consent; the Lessee shall insure the structure against fire and allied perils.
+9. NO SUB-LETTING: The Lessee shall not assign, sub-let or part with possession without the Lessor's prior written consent.
+10. FORFEITURE: If the Lessee breaches any covenant or rent remains unpaid for [DAYS] days after notice, the Lessor may re-enter and determine the lease.
+11. SURRENDER: On expiry or earlier determination the Lessee shall surrender the Demised Premises; either party may terminate by [DAYS] days' notice to quit where permitted.
+12. DISPUTES: Disputes shall be referred to arbitration under the Arbitration and Conciliation Act, 1996; courts at [PLACE] have jurisdiction.
+13. STAMP AND REGISTRATION: This deed is stamped as per the State Stamp Act and shall be registered with the Sub-Registrar under the Registration Act, 1908 (leases exceeding one year are compulsorily registrable).
+    The parties declare that all facts are true and correct and given of free will without coercion.
+
+SCHEDULE: [DESCRIPTION, SURVEY/PLOT NO., ADDRESS, AREA, BOUNDARIES NORTH/SOUTH/EAST/WEST]
+
+IN WITNESS WHEREOF the parties have signed this Lease Deed on the date first written above:
+LESSOR: [SIGNATURE]   LESSEE: [SIGNATURE]
+WITNESS 1: [NAME, ADDRESS, SIGNATURE]   WITNESS 2: [NAME, ADDRESS, SIGNATURE]

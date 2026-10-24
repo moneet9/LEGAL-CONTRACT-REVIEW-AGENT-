@@ -1,0 +1,327 @@
+{
+  "id": "lease_deed",
+  "name": "Lease Deed (long-term / registered lease, TPA ss.105-117)",
+  "applies_to": "Lease Deed (long-term / registered lease, TPA ss.105-117)",
+  "detect_keywords": [
+    "lease deed",
+    "\\blessors?\\b",
+    "\\blessees?\\b",
+    "\\bdemise\\b|hereby demises?",
+    "premium",
+    "ground rent",
+    "term of \\d+ years|for a (term|period) of \\d+ years",
+    "yearly rent|annual rent",
+    "renewal"
+  ],
+  "sources": [
+    {
+      "title": "Transfer of Property Act, 1882",
+      "where": "https://www.indiacode.nic.in",
+      "key": "tpa"
+    },
+    {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in",
+      "key": "reg"
+    },
+    {
+      "title": "Indian Stamp Act, 1899 (+ each State's Stamp Act/Schedule)",
+      "where": "https://www.indiacode.nic.in and the State IGR/Stamps dept.",
+      "key": "stamp"
+    },
+    {
+      "title": "Delhi Revenue Dept. model deeds (Sale, Agreement to Sell, Lease, Exchange, Will, GPA, Gift)",
+      "where": "https://dmeast.delhi.gov.in/model-deed-page/",
+      "key": "delhi"
+    }
+  ],
+  "required_clauses": [
+    {
+      "id": "parties",
+      "title": "Parties with full names, parentage/address and capacity",
+      "keywords": [
+        "s/o|d/o|w/o|son of|daughter of|wife of",
+        "resident of|r/o|residing at",
+        "hereinafter (called|referred)",
+        "aged about|major"
+      ],
+      "severity": "high",
+      "guidance": "Names, father/spouse name, age, address. Parties must be majors of sound mind (Contract Act s.11).",
+      "source": []
+    },
+    {
+      "id": "party_ids",
+      "title": "Party identity proofs (PAN / Aadhaar)",
+      "keywords": [
+        "\\bPAN\\b",
+        "aadhaar|aadhar",
+        "identity (proof|card)",
+        "photo ?id"
+      ],
+      "severity": "medium",
+      "guidance": "PAN is required on high-value immovable property transactions; many states also record Aadhaar.",
+      "source": []
+    },
+    {
+      "id": "property",
+      "title": "Property description (schedule, survey/plot no., area, boundaries)",
+      "keywords": [
+        "schedule",
+        "survey (no|number)|khasra|khewat|cts no|plot no|flat no|gat no",
+        "bounded (by|as follows)|north|east|south|west",
+        "(square|sq\\.?) ?(feet|ft|yards?|metres?|meters?)|area (of|admeasuring)|admeasuring"
+      ],
+      "severity": "high",
+      "guidance": "Unambiguous identification of the property is essential for registration.",
+      "source": []
+    },
+    {
+      "id": "demise",
+      "title": "Words of demise / grant of lease",
+      "keywords": [
+        "hereby (demises?|grants?|leases?)",
+        "lease (of|for)"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.105: transfer of right to enjoy property for a term, in consideration of price/rent.",
+      "source": []
+    },
+    {
+      "id": "term",
+      "title": "Term, commencement and renewal option",
+      "keywords": [
+        "term of \\d+|for a (term|period) of",
+        "commenc(e|ing)|w\\.?e\\.?f\\.?",
+        "renew(al)?|option to (renew|extend)"
+      ],
+      "severity": "high",
+      "guidance": "Lease for over one year (or year-to-year) must be a registered instrument (s.107).",
+      "source": []
+    },
+    {
+      "id": "rent_premium",
+      "title": "Rent / premium and payment terms",
+      "keywords": [
+        "(yearly|annual|monthly) rent|ground rent",
+        "premium",
+        "payable (monthly|yearly|annually|in advance)"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "escalation",
+      "title": "Rent escalation",
+      "keywords": [
+        "escalat|enhanc|increase|revis"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "use_restrictions",
+      "title": "Permitted use and restrictions",
+      "keywords": [
+        "permitted use|used (only )?for",
+        "not to (use|carry on)",
+        "(residential|commercial|industrial|agricultural) (purpose|use)"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "lessor_covenants",
+      "title": "Lessor's covenants (quiet enjoyment, title, taxes)",
+      "keywords": [
+        "quiet (and peaceful )?(possession|enjoyment)",
+        "lessor (shall|covenants?)",
+        "good title|right to (lease|grant)",
+        "(property )?tax"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.108(a)-(c).",
+      "source": []
+    },
+    {
+      "id": "lessee_covenants",
+      "title": "Lessee's covenants (pay rent, repair, use, restore)",
+      "keywords": [
+        "lessee (shall|covenants?)",
+        "pay (the )?rent",
+        "repair|maintain",
+        "restore|yield up|hand over (the )?possession"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.108(l)-(q).",
+      "source": []
+    },
+    {
+      "id": "transfer_sublet",
+      "title": "Assignment / sub-letting",
+      "keywords": [
+        "sub-?let|assign|transfer (of|the) lease"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "forfeiture",
+      "title": "Forfeiture / re-entry on breach",
+      "keywords": [
+        "forfeit",
+        "re-?entry|re-?enter",
+        "breach",
+        "determination of lease|terminate"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.111(g).",
+      "source": []
+    },
+    {
+      "id": "insurance_improvements",
+      "title": "Improvements, structures and insurance",
+      "keywords": [
+        "improvement|construction|structure",
+        "insur"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "surrender_notice",
+      "title": "Surrender / notice to quit",
+      "keywords": [
+        "surrender",
+        "notice (to quit|of termination)",
+        "expiry (of|the) (term|lease)"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "dispute",
+      "title": "Dispute resolution / jurisdiction",
+      "keywords": [
+        "arbitrat",
+        "jurisdiction",
+        "courts? (at|of|in)"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "stamp",
+      "title": "Stamp duty paid (e-stamp / stamp paper details)",
+      "keywords": [
+        "stamp duty",
+        "e-?stamp",
+        "stamp paper",
+        "\\bUIN\\b|certificate (no|number)|franking",
+        "adjudicat"
+      ],
+      "severity": "high",
+      "guidance": "Instrument must be stamped as per the State Stamp Act before/at execution; unstamped documents are inadmissible until duty and penalty are paid.",
+      "source": []
+    },
+    {
+      "id": "registration",
+      "title": "Registration particulars (Sub-Registrar, Registration Act)",
+      "keywords": [
+        "sub-?registrar",
+        "registration act",
+        "registered",
+        "presented for registration"
+      ],
+      "severity": "high",
+      "guidance": "Registration Act s.17 makes registration compulsory for these instruments; present within 4 months of execution (s.23).",
+      "source": []
+    },
+    {
+      "id": "declaration",
+      "title": "Declarations: no fraud, no coercion, facts true",
+      "keywords": [
+        "free (will|consent)",
+        "without (any )?(coercion|undue influence|pressure)",
+        "true and correct",
+        "not (a )?fraudulent|no fraud",
+        "sound (mind|disposition)"
+      ],
+      "severity": "medium",
+      "guidance": "Official formats (e.g. NGDRS Punjab) carry a no-fraud declaration with penal consequences under the Registration Act.",
+      "source": []
+    },
+    {
+      "id": "execution",
+      "title": "Place and date of execution; signatures",
+      "keywords": [
+        "executed (at|on)",
+        "(signed|sealed) (and delivered|by)",
+        "in witness whereof",
+        "this \\d+(st|nd|rd|th)? day of|dated (this )?\\w* ?day|\\bday of\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "witnesses",
+      "title": "Signatures and attestation by two witnesses",
+      "keywords": [
+        "witness(es)?",
+        "in the presence of",
+        "attested",
+        "thumb impression"
+      ],
+      "severity": "high",
+      "guidance": "Two attesting witnesses are mandatory for gift, mortgage and will; customary/State-required for others.",
+      "source": []
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "notary_only",
+      "title": "Property transfer 'notarised' only / on plain paper",
+      "pattern": "(notari[sz]ed|on plain paper|on white paper|affidavit)[^.]{0,80}(sale|transfer|gift|mortgage|lease)",
+      "why": "Notarisation is not registration; immovable property transfers above the statutory limit need a registered, stamped instrument."
+    },
+    {
+      "id": "gpa_sale",
+      "title": "'GPA sale' / irrevocable GPA used as a transfer",
+      "pattern": "irrevocable (general )?power of attorney[^.]{0,120}(sell|sale|transfer|convey)|general power of attorney[^.]{0,80}(in lieu of|instead of) (sale|conveyance)",
+      "why": "Suraj Lamp v. State of Haryana (SC 2011): GPA/agreement/will sales do not convey title."
+    },
+    {
+      "id": "cash_large",
+      "title": "Large cash consideration",
+      "pattern": "(paid|payable|received)[^.]{0,40}\\bin cash\\b[^.]{0,60}(lakh|lac|crore)|cash of rs\\.? ?[\\d,]{7,}",
+      "why": "Cash receipts of Rs 20,000+ for immovable property are restricted under the Income-tax Act (ss.269SS/269ST); also undervaluation risk."
+    },
+    {
+      "id": "undervalue",
+      "title": "Consideration expressly lower than market/circle rate",
+      "pattern": "(lower|less) than (the )?(market|circle|ready ?reckoner|guidance) (value|rate)|show(n|ing)? (a )?lower (value|consideration)",
+      "why": "Undervaluation attracts stamp-duty deficiency, penalty and tax consequences."
+    },
+    {
+      "id": "blank_fields",
+      "title": "Unfilled placeholders in final document",
+      "pattern": "\\[(name|date|amount|address|survey|plot|area)[^\\]]*\\]|_{6,}|\\bXXXX+\\b",
+      "why": "Final deed should not contain blanks."
+    },
+    {
+      "id": "unregistered_clause",
+      "title": "Deed says it need not be registered",
+      "pattern": "(need|shall) not be registered|no need (to|for) regist|unregistered (deed|agreement) (is|shall be) (valid|binding)",
+      "why": "Compulsorily registrable instruments are not effective for transferring an interest without registration (Registration Act s.17, TPA s.54/107/123)."
+    }
+  ],
+  "benchmarks": [],
+  "disclaimer": "Checklist built from the cited central statutes and official state/NGDRS deed formats. Stamp duty rates, registration fees and some mandatory clauses are STATE-specific; verify with the State Registration & Stamps department. Not legal advice."
+}

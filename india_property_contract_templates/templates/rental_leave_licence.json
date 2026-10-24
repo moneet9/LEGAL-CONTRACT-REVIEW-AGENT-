@@ -1,0 +1,364 @@
+{
+  "id": "rental_leave_licence",
+  "name": "Rental / Leave and Licence agreement (residential or commercial, typically 11 months)",
+  "applies_to": "Rental / Leave and Licence agreement (residential or commercial, typically 11 months)",
+  "detect_keywords": [
+    "leave (and|&) licen[cs]e",
+    "\\blicensor\\b",
+    "\\blicensee\\b",
+    "\\blandlord\\b",
+    "\\btenant\\b",
+    "monthly rent|rent of rs",
+    "security deposit",
+    "11 months|eleven months",
+    "lock-?in"
+  ],
+  "sources": [
+    {
+      "title": "Transfer of Property Act, 1882",
+      "where": "https://www.indiacode.nic.in",
+      "key": "tpa"
+    },
+    {
+      "title": "Model Tenancy Act, 2021 (MoHUA; adopted state by state)",
+      "where": "https://mohua.gov.in",
+      "key": "mta"
+    },
+    {
+      "title": "Indian Stamp Act, 1899 (+ each State's Stamp Act/Schedule)",
+      "where": "https://www.indiacode.nic.in and the State IGR/Stamps dept.",
+      "key": "stamp"
+    },
+    {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in",
+      "key": "reg"
+    }
+  ],
+  "required_clauses": [
+    {
+      "id": "parties",
+      "title": "Parties with full names, parentage/address and capacity",
+      "keywords": [
+        "s/o|d/o|w/o|son of|daughter of|wife of",
+        "resident of|r/o|residing at",
+        "hereinafter (called|referred)",
+        "aged about|major"
+      ],
+      "severity": "high",
+      "guidance": "Names, father/spouse name, age, address. Parties must be majors of sound mind (Contract Act s.11).",
+      "source": []
+    },
+    {
+      "id": "party_ids",
+      "title": "Party identity proofs (PAN / Aadhaar)",
+      "keywords": [
+        "\\bPAN\\b",
+        "aadhaar|aadhar",
+        "identity (proof|card)",
+        "photo ?id"
+      ],
+      "severity": "medium",
+      "guidance": "PAN is required on high-value immovable property transactions; many states also record Aadhaar.",
+      "source": []
+    },
+    {
+      "id": "premises",
+      "title": "Description of premises and permitted use",
+      "keywords": [
+        "premises",
+        "(flat|unit|shop|office|apartment) no|situated at",
+        "(residential|commercial) (purpose|use)",
+        "permitted use|used (only )?for"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "term",
+      "title": "Term/duration, start date and renewal",
+      "keywords": [
+        "(period|term) of \\d+|for a (period|term) of",
+        "commenc(e|ing)|w\\.?e\\.?f\\.?|with effect from",
+        "renew(al)?",
+        "11 months|eleven months|12 months|\\d+ months"
+      ],
+      "severity": "high",
+      "guidance": "Lease > 1 year (year-to-year) must be by registered instrument (TPA s.107); some states (e.g. Maharashtra) require leave-and-licence registration regardless.",
+      "source": []
+    },
+    {
+      "id": "rent",
+      "title": "Rent amount, due date and payment mode",
+      "keywords": [
+        "monthly (rent|licen[cs]e fee)",
+        "rent of rs|licen[cs]e fee of rs",
+        "(on or before|by) the \\d+(st|nd|rd|th)",
+        "payable (monthly|in advance)",
+        "bank transfer|cheque|\\bUPI\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "rent_escalation",
+      "title": "Rent revision / escalation",
+      "keywords": [
+        "escalat|increase|revis(ion|ed)",
+        "\\d+ ?% (per annum|annually)|annual increment"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "security_deposit",
+      "title": "Security deposit and refund conditions",
+      "keywords": [
+        "security deposit",
+        "refund(able)?",
+        "(interest[- ]free)",
+        "deduct(ion|ed)? (for|towards)"
+      ],
+      "severity": "high",
+      "guidance": "Model Tenancy Act s.11: deposit capped at 2 months' rent (residential) / 1 month (non-residential) where adopted - verify State law.",
+      "source": []
+    },
+    {
+      "id": "lockin_notice",
+      "title": "Lock-in period and notice of termination",
+      "keywords": [
+        "lock-?in",
+        "notice (period )?of \\d+|\\d+ (days|months)['’]? (prior |written )?notice",
+        "terminat"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.106 default notice periods apply if the contract is silent.",
+      "source": []
+    },
+    {
+      "id": "maintenance_utilities",
+      "title": "Maintenance, repairs, utility bills, society charges, property tax",
+      "keywords": [
+        "maintenance",
+        "repairs?",
+        "electricity|water|gas|utilit(y|ies)",
+        "society (charges|dues)|property tax"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.108 allocates repair duties between lessor and lessee if silent.",
+      "source": []
+    },
+    {
+      "id": "subletting",
+      "title": "Sub-letting / assignment restriction",
+      "keywords": [
+        "sub-?let|sub-?licen[cs]e|assign"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "entry_inspection",
+      "title": "Landlord's right to enter/inspect",
+      "keywords": [
+        "(enter|entry|inspect)[^.]{0,80}(notice|prior|reasonable)",
+        "24 hours"
+      ],
+      "severity": "medium",
+      "guidance": "Model Tenancy Act s.20: 24 hours' written notice before entry.",
+      "source": []
+    },
+    {
+      "id": "alterations",
+      "title": "Alterations / damage / restoration on exit",
+      "keywords": [
+        "alteration|structural change",
+        "damage",
+        "restore|restoration|original condition"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "lawful_use",
+      "title": "Lawful use; no nuisance; compliance with society rules/police verification",
+      "keywords": [
+        "unlawful|illegal",
+        "nuisance|annoyance",
+        "police verification",
+        "society (rules|bye-?laws)"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "possession_handover",
+      "title": "Handing over and vacating possession",
+      "keywords": [
+        "hand(ing)? over (the )?(possession|premises)|vacant possession",
+        "vacate"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "eviction_default",
+      "title": "Default and eviction grounds",
+      "keywords": [
+        "default",
+        "evict",
+        "non-?payment",
+        "breach"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "furnishing_inventory",
+      "title": "Inventory of fixtures/furnishing",
+      "keywords": [
+        "inventory|list of (fittings|fixtures|items)",
+        "furnish|fixtures|fittings"
+      ],
+      "severity": "low",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "dispute",
+      "title": "Dispute resolution and jurisdiction",
+      "keywords": [
+        "arbitrat|mediation",
+        "jurisdiction",
+        "courts? (at|of|in)"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "rent_authority",
+      "title": "Intimation to Rent Authority / police (where State law requires)",
+      "keywords": [
+        "rent authority",
+        "police station",
+        "intimat"
+      ],
+      "severity": "low",
+      "guidance": "Model Tenancy Act s.4 requires submission to the Rent Authority within 2 months where adopted.",
+      "source": []
+    },
+    {
+      "id": "stamp",
+      "title": "Stamp duty paid (e-stamp / stamp paper details)",
+      "keywords": [
+        "stamp duty",
+        "e-?stamp",
+        "stamp paper",
+        "\\bUIN\\b|certificate (no|number)|franking",
+        "adjudicat"
+      ],
+      "severity": "high",
+      "guidance": "Instrument must be stamped as per the State Stamp Act before/at execution; unstamped documents are inadmissible until duty and penalty are paid.",
+      "source": []
+    },
+    {
+      "id": "registration_rental",
+      "title": "Registration (mandatory for >1 year and in some states for leave and licence)",
+      "keywords": [
+        "sub-?registrar",
+        "registration act",
+        "registered"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "execution",
+      "title": "Place and date of execution; signatures",
+      "keywords": [
+        "executed (at|on)",
+        "(signed|sealed) (and delivered|by)",
+        "in witness whereof",
+        "this \\d+(st|nd|rd|th)? day of|dated (this )?\\w* ?day|\\bday of\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "witnesses",
+      "title": "Signatures and attestation by two witnesses",
+      "keywords": [
+        "witness(es)?",
+        "in the presence of",
+        "attested",
+        "thumb impression"
+      ],
+      "severity": "high",
+      "guidance": "Two attesting witnesses are mandatory for gift, mortgage and will; customary/State-required for others.",
+      "source": []
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "notary_only",
+      "title": "Property transfer 'notarised' only / on plain paper",
+      "pattern": "(notari[sz]ed|on plain paper|on white paper|affidavit)[^.]{0,80}(sale|transfer|gift|mortgage|lease)",
+      "why": "Notarisation is not registration; immovable property transfers above the statutory limit need a registered, stamped instrument."
+    },
+    {
+      "id": "gpa_sale",
+      "title": "'GPA sale' / irrevocable GPA used as a transfer",
+      "pattern": "irrevocable (general )?power of attorney[^.]{0,120}(sell|sale|transfer|convey)|general power of attorney[^.]{0,80}(in lieu of|instead of) (sale|conveyance)",
+      "why": "Suraj Lamp v. State of Haryana (SC 2011): GPA/agreement/will sales do not convey title."
+    },
+    {
+      "id": "cash_large",
+      "title": "Large cash consideration",
+      "pattern": "(paid|payable|received)[^.]{0,40}\\bin cash\\b[^.]{0,60}(lakh|lac|crore)|cash of rs\\.? ?[\\d,]{7,}",
+      "why": "Cash receipts of Rs 20,000+ for immovable property are restricted under the Income-tax Act (ss.269SS/269ST); also undervaluation risk."
+    },
+    {
+      "id": "undervalue",
+      "title": "Consideration expressly lower than market/circle rate",
+      "pattern": "(lower|less) than (the )?(market|circle|ready ?reckoner|guidance) (value|rate)|show(n|ing)? (a )?lower (value|consideration)",
+      "why": "Undervaluation attracts stamp-duty deficiency, penalty and tax consequences."
+    },
+    {
+      "id": "blank_fields",
+      "title": "Unfilled placeholders in final document",
+      "pattern": "\\[(name|date|amount|address|survey|plot|area)[^\\]]*\\]|_{6,}|\\bXXXX+\\b",
+      "why": "Final deed should not contain blanks."
+    },
+    {
+      "id": "unregistered_clause",
+      "title": "Deed says it need not be registered",
+      "pattern": "(need|shall) not be registered|no need (to|for) regist|unregistered (deed|agreement) (is|shall be) (valid|binding)",
+      "why": "Compulsorily registrable instruments are not effective for transferring an interest without registration (Registration Act s.17, TPA s.54/107/123)."
+    },
+    {
+      "id": "tenant_eviction_any",
+      "title": "Landlord may evict at any time without notice",
+      "pattern": "(evict|vacate|terminate)[^.]{0,80}(at any time|without (any )?notice|sole discretion)",
+      "why": "Eviction must follow notice/process; check State rent law."
+    },
+    {
+      "id": "deposit_excess",
+      "title": "Deposit of 6 months or more",
+      "pattern": "security deposit[^.]{0,60}(\\b([6-9]|1[0-2]) ?\\(?(six|seven|eight|nine|ten|eleven|twelve)?\\)? ?months?)",
+      "why": "Model Tenancy Act caps deposit at 2 months' rent (residential) where adopted - confirm local law."
+    }
+  ],
+  "benchmarks": [],
+  "disclaimer": "Checklist built from the cited central statutes and official state/NGDRS deed formats. Stamp duty rates, registration fees and some mandatory clauses are STATE-specific; verify with the State Registration & Stamps department. Not legal advice."
+}

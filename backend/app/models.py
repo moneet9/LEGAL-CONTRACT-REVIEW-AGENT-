@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
+from typing import Any
 class Chunk(BaseModel):
     chunk_id: str; contract_id: str; page_start: int; page_end: int
     section: str = ""; clause: str = ""; heading: str = ""; text: str
@@ -16,6 +17,7 @@ class ReviewRequest(BaseModel):
     model: str | None = None
     party: str = ""
     perspective: str = ""
+    perspectives: list[str] = Field(default_factory=lambda: ["contract_giver", "contract_acceptor"])
     contract_type: str = ""
     jurisdiction: str = ""
 class ChatRequest(BaseModel):
@@ -43,6 +45,8 @@ class DecisionRequest(BaseModel):
     decision: str; note: str = ""
 class ContractMeta(BaseModel):
     contract_id: str; original_filename: str; sha256: str; upload_time: datetime
+    selected_model: str = ""
+    document_config: dict[str, Any] = Field(default_factory=dict)
     workspace_id: str = "default"
     page_count: int = 0; processing_status: str = "indexing"; indexing_progress: int = 0; indexing_stage: str = "Queued"; chunk_count: int = 0; indexing_error: str | None = None
     embedding_status: str = "pending"; analysis_status: str = "not_started"; analysis_progress: int = 0; analysis_stage: str = "Not started"

@@ -1,0 +1,314 @@
+{
+  "id": "gift_deed",
+  "name": "Gift Deed (immovable property, TPA ss.122-129)",
+  "applies_to": "Gift Deed (immovable property, TPA ss.122-129)",
+  "detect_keywords": [
+    "gift deed",
+    "\\bdonors?\\b",
+    "\\bdonees?\\b",
+    "love and affection",
+    "voluntar(y|ily)",
+    "without (any )?consideration",
+    "hereby (gifts?|transfers?)",
+    "accept(s|ed|ance)? (the )?gift"
+  ],
+  "sources": [
+    {
+      "title": "Transfer of Property Act, 1882",
+      "where": "https://www.indiacode.nic.in",
+      "key": "tpa"
+    },
+    {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in",
+      "key": "reg"
+    },
+    {
+      "title": "Indian Stamp Act, 1899 (+ each State's Stamp Act/Schedule)",
+      "where": "https://www.indiacode.nic.in and the State IGR/Stamps dept.",
+      "key": "stamp"
+    },
+    {
+      "title": "NGDRS state deed templates (e.g. Punjab Sale Deed template)",
+      "where": "https://ngdrs.gov.in",
+      "key": "ngdrs"
+    },
+    {
+      "title": "Delhi Revenue Dept. model deeds (Sale, Agreement to Sell, Lease, Exchange, Will, GPA, Gift)",
+      "where": "https://dmeast.delhi.gov.in/model-deed-page/",
+      "key": "delhi"
+    }
+  ],
+  "required_clauses": [
+    {
+      "id": "parties",
+      "title": "Parties with full names, parentage/address and capacity",
+      "keywords": [
+        "s/o|d/o|w/o|son of|daughter of|wife of",
+        "resident of|r/o|residing at",
+        "hereinafter (called|referred)",
+        "aged about|major"
+      ],
+      "severity": "high",
+      "guidance": "Names, father/spouse name, age, address. Parties must be majors of sound mind (Contract Act s.11).",
+      "source": []
+    },
+    {
+      "id": "relationship",
+      "title": "Relationship between donor and donee",
+      "keywords": [
+        "(father|mother|son|daughter|wife|husband|brother|sister|grand\\w+|nephew|niece|relative)",
+        "relationship",
+        "natural love and affection"
+      ],
+      "severity": "medium",
+      "guidance": "Many states give stamp-duty concessions to gifts among close family.",
+      "source": []
+    },
+    {
+      "id": "party_ids",
+      "title": "Party identity proofs (PAN / Aadhaar)",
+      "keywords": [
+        "\\bPAN\\b",
+        "aadhaar|aadhar",
+        "identity (proof|card)",
+        "photo ?id"
+      ],
+      "severity": "medium",
+      "guidance": "PAN is required on high-value immovable property transactions; many states also record Aadhaar.",
+      "source": []
+    },
+    {
+      "id": "property",
+      "title": "Property description (schedule, survey/plot no., area, boundaries)",
+      "keywords": [
+        "schedule",
+        "survey (no|number)|khasra|khewat|cts no|plot no|flat no|gat no",
+        "bounded (by|as follows)|north|east|south|west",
+        "(square|sq\\.?) ?(feet|ft|yards?|metres?|meters?)|area (of|admeasuring)|admeasuring"
+      ],
+      "severity": "high",
+      "guidance": "Unambiguous identification of the property is essential for registration.",
+      "source": []
+    },
+    {
+      "id": "donor_ownership",
+      "title": "Donor's ownership and right to gift",
+      "keywords": [
+        "absolute owner|sole owner|self-?acquired",
+        "title (deeds?|documents?)",
+        "right (and|to) (authority )?to gift"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "no_consideration",
+      "title": "Gift made voluntarily without consideration",
+      "keywords": [
+        "without (any )?(consideration|monetary)",
+        "voluntar(y|ily)",
+        "natural love and affection",
+        "out of (love|affection)"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.122: transfer must be voluntary and without consideration.",
+      "source": []
+    },
+    {
+      "id": "operative_gift",
+      "title": "Operative words of gift",
+      "keywords": [
+        "hereby (gifts?|transfers?|conveys?)",
+        "gift(s|ed)? (the )?(property|schedule)"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "acceptance",
+      "title": "Acceptance by donee during donor's lifetime",
+      "keywords": [
+        "accept(s|ed|ance)",
+        "donee (has|hereby) accept"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.122: gift is complete only on acceptance during donor's lifetime.",
+      "source": []
+    },
+    {
+      "id": "possession",
+      "title": "Delivery of possession / mutation",
+      "keywords": [
+        "possession",
+        "mutation|khata|property card|record of rights"
+      ],
+      "severity": "medium",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "no_encumbrance",
+      "title": "Property free from encumbrance",
+      "keywords": [
+        "free from (all )?(encumbrances?|charges?|liens?)",
+        "encumbrance",
+        "no (pending )?litigation"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "irrevocability",
+      "title": "Irrevocability / conditions / life interest",
+      "keywords": [
+        "irrevocable",
+        "revoke|revocation",
+        "life interest|reserve(s|d)? (the )?(right|life)",
+        "condition"
+      ],
+      "severity": "medium",
+      "guidance": "TPA s.126: revocation only by agreed conditions (not at the donor's mere will).",
+      "source": []
+    },
+    {
+      "id": "onerous",
+      "title": "Onerous gift / liabilities attached",
+      "keywords": [
+        "onerous",
+        "liabilit(y|ies)",
+        "loan|mortgage"
+      ],
+      "severity": "low",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "family_consent",
+      "title": "Consent of co-owners/other legal heirs",
+      "keywords": [
+        "consent",
+        "co-?owners?",
+        "legal heirs?"
+      ],
+      "severity": "low",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "stamp",
+      "title": "Stamp duty paid (e-stamp / stamp paper details)",
+      "keywords": [
+        "stamp duty",
+        "e-?stamp",
+        "stamp paper",
+        "\\bUIN\\b|certificate (no|number)|franking",
+        "adjudicat"
+      ],
+      "severity": "high",
+      "guidance": "Instrument must be stamped as per the State Stamp Act before/at execution; unstamped documents are inadmissible until duty and penalty are paid.",
+      "source": []
+    },
+    {
+      "id": "registration",
+      "title": "Registration particulars (Sub-Registrar, Registration Act)",
+      "keywords": [
+        "sub-?registrar",
+        "registration act",
+        "registered",
+        "presented for registration"
+      ],
+      "severity": "high",
+      "guidance": "Registration Act s.17 makes registration compulsory for these instruments; present within 4 months of execution (s.23).",
+      "source": []
+    },
+    {
+      "id": "declaration",
+      "title": "Declarations: no fraud, no coercion, facts true",
+      "keywords": [
+        "free (will|consent)",
+        "without (any )?(coercion|undue influence|pressure)",
+        "true and correct",
+        "not (a )?fraudulent|no fraud",
+        "sound (mind|disposition)"
+      ],
+      "severity": "medium",
+      "guidance": "Official formats (e.g. NGDRS Punjab) carry a no-fraud declaration with penal consequences under the Registration Act.",
+      "source": []
+    },
+    {
+      "id": "execution",
+      "title": "Place and date of execution; signatures",
+      "keywords": [
+        "executed (at|on)",
+        "(signed|sealed) (and delivered|by)",
+        "in witness whereof",
+        "this \\d+(st|nd|rd|th)? day of|dated (this )?\\w* ?day|\\bday of\\b"
+      ],
+      "severity": "high",
+      "guidance": "",
+      "source": []
+    },
+    {
+      "id": "two_witnesses",
+      "title": "Attested by at least two witnesses (mandatory)",
+      "keywords": [
+        "witness(es)?",
+        "attested",
+        "in the presence of"
+      ],
+      "severity": "high",
+      "guidance": "TPA s.123: registered instrument signed by donor and attested by at least two witnesses.",
+      "source": []
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "notary_only",
+      "title": "Property transfer 'notarised' only / on plain paper",
+      "pattern": "(notari[sz]ed|on plain paper|on white paper|affidavit)[^.]{0,80}(sale|transfer|gift|mortgage|lease)",
+      "why": "Notarisation is not registration; immovable property transfers above the statutory limit need a registered, stamped instrument."
+    },
+    {
+      "id": "gpa_sale",
+      "title": "'GPA sale' / irrevocable GPA used as a transfer",
+      "pattern": "irrevocable (general )?power of attorney[^.]{0,120}(sell|sale|transfer|convey)|general power of attorney[^.]{0,80}(in lieu of|instead of) (sale|conveyance)",
+      "why": "Suraj Lamp v. State of Haryana (SC 2011): GPA/agreement/will sales do not convey title."
+    },
+    {
+      "id": "cash_large",
+      "title": "Large cash consideration",
+      "pattern": "(paid|payable|received)[^.]{0,40}\\bin cash\\b[^.]{0,60}(lakh|lac|crore)|cash of rs\\.? ?[\\d,]{7,}",
+      "why": "Cash receipts of Rs 20,000+ for immovable property are restricted under the Income-tax Act (ss.269SS/269ST); also undervaluation risk."
+    },
+    {
+      "id": "undervalue",
+      "title": "Consideration expressly lower than market/circle rate",
+      "pattern": "(lower|less) than (the )?(market|circle|ready ?reckoner|guidance) (value|rate)|show(n|ing)? (a )?lower (value|consideration)",
+      "why": "Undervaluation attracts stamp-duty deficiency, penalty and tax consequences."
+    },
+    {
+      "id": "blank_fields",
+      "title": "Unfilled placeholders in final document",
+      "pattern": "\\[(name|date|amount|address|survey|plot|area)[^\\]]*\\]|_{6,}|\\bXXXX+\\b",
+      "why": "Final deed should not contain blanks."
+    },
+    {
+      "id": "unregistered_clause",
+      "title": "Deed says it need not be registered",
+      "pattern": "(need|shall) not be registered|no need (to|for) regist|unregistered (deed|agreement) (is|shall be) (valid|binding)",
+      "why": "Compulsorily registrable instruments are not effective for transferring an interest without registration (Registration Act s.17, TPA s.54/107/123)."
+    },
+    {
+      "id": "gift_for_money",
+      "title": "Gift deed states a price/consideration",
+      "pattern": "gift[^.]{0,80}(for|in consideration of|against)[^.]{0,30}(sum|rs\\.?|rupees|price)",
+      "why": "If money is paid it is a sale, not a gift."
+    }
+  ],
+  "benchmarks": [],
+  "disclaimer": "Checklist built from the cited central statutes and official state/NGDRS deed formats. Stamp duty rates, registration fees and some mandatory clauses are STATE-specific; verify with the State Registration & Stamps department. Not legal advice."
+}

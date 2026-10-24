@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "types": [
+    {
+      "id": "sale_deed",
+      "name": "Sale Deed (conveyance of immovable property)",
+      "clause_count": 19
+    },
+    {
+      "id": "agreement_to_sell",
+      "name": "Agreement to Sell / Sale Agreement (before the sale deed)",
+      "clause_count": 18
+    },
+    {
+      "id": "rental_leave_licence",
+      "name": "Rental / Leave and Licence agreement (residential or commercial, typically 11 months)",
+      "clause_count": 22
+    },
+    {
+      "id": "lease_deed",
+      "name": "Lease Deed (long-term / registered lease, TPA ss.105-117)",
+      "clause_count": 20
+    },
+    {
+      "id": "gift_deed",
+      "name": "Gift Deed (immovable property, TPA ss.122-129)",
+      "clause_count": 18
+    },
+    {
+      "id": "power_of_attorney",
+      "name": "Power of Attorney (general or special)",
+      "clause_count": 14
+    },
+    {
+      "id": "will",
+      "name": "Will / Testament (Indian Succession Act 1925)",
+      "clause_count": 12
+    },
+    {
+      "id": "mortgage_deed",
+      "name": "Mortgage Deed (TPA ss.58-104)",
+      "clause_count": 16
+    }
+  ],
+  "sources": {
+    "tpa": {
+      "title": "Transfer of Property Act, 1882",
+      "where": "https://www.indiacode.nic.in"
+    },
+    "reg": {
+      "title": "Registration Act, 1908",
+      "where": "https://www.indiacode.nic.in"
+    },
+    "stamp": {
+      "title": "Indian Stamp Act, 1899 (+ each State's Stamp Act/Schedule)",
+      "where": "https://www.indiacode.nic.in and the State IGR/Stamps dept."
+    },
+    "contract": {
+      "title": "Indian Contract Act, 1872",
+      "where": "https://www.indiacode.nic.in"
+    },
+    "succ": {
+      "title": "Indian Succession Act, 1925",
+      "where": "https://www.indiacode.nic.in"
+    },
+    "poa": {
+      "title": "Powers of Attorney Act, 1882",
+      "where": "https://www.indiacode.nic.in"
+    },
+    "mta": {
+      "title": "Model Tenancy Act, 2021 (MoHUA; adopted state by state)",
+      "where": "https://mohua.gov.in"
+    },
+    "ngdrs": {
+      "title": "NGDRS state deed templates (e.g. Punjab Sale Deed template)",
+      "where": "https://ngdrs.gov.in"
+    },
+    "delhi": {
+      "title": "Delhi Revenue Dept. model deeds (Sale, Agreement to Sell, Lease, Exchange, Will, GPA, Gift)",
+      "where": "https://dmeast.delhi.gov.in/model-deed-page/"
+    },
+    "suraj": {
+      "title": "Suraj Lamp & Industries v. State of Haryana (SC, 2011) - GPA/SA/Will 'sales' are not valid conveyances",
+      "where": "Supreme Court of India"
+    }
+  }
+}
