@@ -5,6 +5,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 class Settings(BaseSettings):
     gemini_api_key: str | None = None
+    tavily_api_key: str | None = None
     gemini_model: str = "gemini-flash-lite-latest"
     embedding_model: str = "sentence-transformers/multi-qa-MiniLM-L6-cos-v1"
     embedding_dimension: int = 384

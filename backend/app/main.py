@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 import json
 import re
+import importlib.util
 from fastapi import BackgroundTasks, FastAPI, UploadFile, File, Form, HTTPException, Header
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,6 +13,7 @@ from .security import classify_untrusted, valid_evidence
 from .gemini import ModelGenerationError, available_models, default_model, generate
 from .embeddings import embed, embed_query
 from .agents import AGENT_CONTRIBUTIONS, AgentContext, MasterAgent, graph_context, configure_document, optimize_chunks, build_graph, validate_graph, fix_review_artifacts
+from .internet_search import format_research_context
 app=FastAPI(title="PS-9 Legal Contract Review Agent",version="1.0.0")
 app.add_middleware(CORSMiddleware,allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],allow_methods=["*"],allow_headers=["*"])
 def scoped_meta(cid,workspace_id):
@@ -37,6 +39,13 @@ def find_source_evidence(quote, chunks):
 @app.get("/api/health")
 def health():
     return {"status":"ok","orchestrator":"healthy","gemini_configured":bool(settings.gemini_api_key),"gemini_model":settings.gemini_model,"embedding_model":settings.embedding_model,"embedding_dimension":settings.embedding_dimension,"max_retries":settings.max_retries}
+
+@app.get("/api/mcp/status")
+def mcp_status():
+    installed = importlib.util.find_spec("mcp") is not None
+    return {"server_status":"ready" if installed else "dependency_missing","transport":"stdio",
+            "internet_search_status":"configured" if settings.tavily_api_key else "missing_api_key",
+            "tools":["classify_contract_document","search_official_legal_sources"]}
 
 @app.get("/api/agents/telemetry")
 def agent_telemetry(x_workspace_id: str = Header(default="default"), contract_id: str | None = None):
@@ -92,7 +101,7 @@ def full_contract_review(chunks, question, model, party="", perspective="", cont
     return findings
 
 
-def full_contract_dual_review(chunks, question, model, party="", contract_type="", jurisdiction=""):
+def full_contract_dual_review(chunks, question, model, party="", contract_type="", jurisdiction="", legal_context=""):
     """Return giver and acceptor findings together so both sides share one model call per evidence batch."""
     if not model: return None
     finding_schema={"type":"array","items":{"type":"object","properties":{
@@ -108,8 +117,9 @@ def full_contract_dual_review(chunks, question, model, party="", contract_type="
             "interpret contract_acceptor as the counterparty receiving or accepting them. Infer these roles only from express contract wording. If the document does not establish the roles, state that limitation in reasoning and do not invent party names. "
             "Return distinct, concise, deduplicated findings in contract_giver and contract_acceptor arrays. Assess material duties, payment, liability, scope, deadlines, termination, dispute, compliance, and missing protections from each side. "
             "Return at most 10 findings per side. Every finding must quote exact supplied text and use its supplied page, clause, and chunk. Do not invent facts, quotes, page numbers, legal duties, or missing clauses. "
+            "Government search results are legal research leads, separate from contract evidence. Only use a rule when the source summary supports it, identify the source in reasoning, and do not state an amendment is in force unless commencement is verified. If no useful source was retrieved, assess contract wording without claiming current law was checked. "
             "Return JSON matching the schema exactly.\n\n"
-            f"Review request: {question}\nParty represented: {party or 'not specified'}\nContract type: {contract_type or 'not specified'}\nJurisdiction: {jurisdiction or 'not specified'}\n\nCONTRACT_TEXT:\n{contract_text}")
+            f"Review request: {question}\nParty represented: {party or 'not specified'}\nContract type: {contract_type or 'not specified'}\nJurisdiction: {jurisdiction or 'not specified'}\n\nOFFICIAL-SOURCE RESEARCH:\n{legal_context}\n\nCONTRACT_TEXT:\n{contract_text}")
     result=generate(prompt,schema,model,temperature=0)
     if result is None: return None
     reviews={"contract_giver":[],"contract_acceptor":[]}
@@ -355,8 +365,12 @@ def run_review(cid, chunks, meta, req):
             limit=max(8000,int(meta.document_config.get("review_context_chars",settings.review_context_chars)))
             batches=review_batches(chunks,limit)
             reviews={"contract_giver":[],"contract_acceptor":[]}
+            classification=ctx.artifacts.get("classification", {})
+            contract_type=req.contract_type or classification.get("document_type", "")
+            jurisdiction=req.jurisdiction or classification.get("jurisdiction", "")
+            legal_context=format_research_context(ctx.artifacts.get("government_research", {}))
             for batch_number,batch in enumerate(batches,1):
-                result=full_contract_dual_review(batch,req.question,req.model,req.party,req.contract_type,req.jurisdiction)
+                result=full_contract_dual_review(batch,req.question,req.model,req.party,contract_type,jurisdiction,legal_context)
                 if result is None:
                     raise RuntimeError(f"Model returned no valid dual-perspective findings for batch {batch_number}/{len(batches)}")
                 for role in reviews:

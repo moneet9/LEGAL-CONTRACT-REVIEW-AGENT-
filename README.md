@@ -9,14 +9,16 @@ python -m venv .venv
 pip install -r backend/requirements.txt
 uvicorn backend.app.main:app --reload
 ```
-Then run `npm install && npm run dev` in `frontend`. Before uploading, choose the contract review model in the upload panel; choose a separate model for chat in the composer. The first upload may download the configured sentence-transformer model. Copy `.env.example` to `.env` to enable Gemini, or run Ollama locally. If you choose local review, the app uses its evidence-linked rule baseline. Runtime data is local under `data/`.
+Then run `npm install && npm run dev` in `frontend`. Before uploading, choose the contract review model in the upload panel; choose a separate model for chat in the composer. The first upload may download the configured sentence-transformer model. Copy `.env.example` to `.env` to enable Gemini, or run Ollama locally. Online legal-source lookup uses `TAVILY_API_KEY` from `.env`.
 
 On Windows, use `start.cmd` to create the virtual environment, install dependencies, create `.env` if needed, and start both services. Use `stop.cmd` to stop them. The PowerShell equivalents are `start.ps1` and `stop.ps1`.
 
 ## How the agents work
 
 ```text
-Upload → Ingestion → document settings and indexing → InitialScan + contract checks
+Upload → Ingestion → document settings and indexing → document classification
+                                          ↓
+                                InitialScan + contract checks
                                           ↓
                              graph validation and review
                                           ↓
@@ -39,6 +41,8 @@ to review in context-capped batches so every indexed passage is covered.
 | **MasterAgent** | Coordinates the review workflow, supervises agent calls, applies retries, records status and output summaries, and runs independent checks in parallel. |
 | **Ingestion** | Extracts text and page information from the PDF, applies the finalized chunk settings, builds searchable indexes and local embeddings when available, and records indexing status. |
 | **DocumentConfigAgent** | Profiles the extracted document and chooses per-contract settings for chunking, embeddings, retrieval, review context, and retries. |
+| **ContractClassifierAgent** | Classifies the document type and likely jurisdiction, with confidence and a supporting quote. |
+| **GovernmentResearchAgent** | Uses the MCP server's Tavily search tool to find related government legal sources after classification; saves results and supplies them as separate context to the review. |
 | **ChunkOptimizer** | Measures the extracted text and recommends chunk size and overlap before search indexes are built. |
 | **InitialScan** | Reviews every contract passage for material risks. When a model is selected, each review batch returns both the **contract giver** and **contract acceptor** views together. The giver is the party providing the stated goods, services, property, or draft; roles are inferred only from contract wording. Local mode uses the same role-neutral checklist for both views. |
 | **GraphBuilder** | Sends the complete contract text in one request to extract named parties, terms, clauses, duties, dates, amounts, and supported relationships. It verifies returned quotes against page text and records their evidence. Without a usable model result, it builds a conservative local graph without exposing storage chunks as graph entities. |
@@ -69,6 +73,25 @@ The right-side perspective tabs switch between the already-saved giver and accep
 reports; switching tabs does not start another model review. The chat answer remains
 grounded in retrieved contract passages, with graph relations used as additional
 context rather than as a replacement for cited source text.
+
+### MCP tools
+
+The MCP server exposes two tools: `classify_contract_document` uses local rules
+and returns a likely document type with a supporting quote; `search_official_legal_sources`
+uses Tavily to search current material on official Indian government legal sites.
+The contract review pipeline runs classification first, then passes the search
+results into the review as separate legal context. Results include links and
+publication dates when available; confirm the linked law and commencement date.
+Search queries contain the classified document type and jurisdiction, not the
+contract text. Start the server from the project directory with:
+
+```bash
+python -m backend.app.mcp_server
+```
+
+Configure an MCP host to launch that command using the project's Python environment.
+The `mcp` dependency is included in `backend/requirements.txt`. Without a Tavily key,
+classification remains available and online lookup reports that it could not run.
 
 Useful diagnostics endpoints:
 
