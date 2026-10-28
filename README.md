@@ -15,35 +15,59 @@ On Windows, use `start.cmd` to create the virtual environment, install dependenc
 
 ## How the agents work
 
-```text
-Upload → Ingestion → document settings and indexing → document classification
-                                          ↓
-                                InitialScan + contract checks
-                                          ↓
-                             graph validation and review
-                                          ↓
-                 both party reports → evidence checks → scores
+The contract workflow begins automatically after upload. `MasterAgent` supervises
+the review stages, records attempts in the local audit log, retries failed agent
+calls according to `MAX_RETRIES`, and runs independent checks in parallel. Long
+contracts are scanned in context-capped batches so every indexed passage is covered.
 
-Chat question → RetrieverAgent → retrieved contract chunks
-                                  + matching graph relations
-                                  → AnswerGenerator → cited answer or abstention
-```
+### Review stages and order
 
-`MasterAgent` supervises the review agents, records each attempt in the local audit
-log, retries failures according to `MAX_RETRIES`, and runs independent checks in
-parallel. Upload starts indexing and review automatically. Long contracts are sent
-to review in context-capped batches so every indexed passage is covered.
+1. **Prepare and index the PDF.** `Ingestion` extracts page text and creates chunks.
+   `DocumentConfigAgent` chooses per-document indexing and retrieval settings, then
+   `ChunkOptimizer` recommends chunk size and overlap. The app applies those settings
+   and builds lexical and, when enabled, vector indexes.
+2. **Classify and research.** `ContractClassifierAgent` identifies the likely document
+   type and jurisdiction. `GovernmentResearchAgent` then searches official Indian
+   government legal sites through Tavily using that classification. Its search
+   results are additional legal context, kept separate from contract evidence.
+3. **Scan the whole contract.** `InitialScan` reviews all indexed chunks in bounded
+   batches and produces contract-giver and contract-acceptor findings.
+4. **Run the first parallel group.** After the initial scan, these six agents run
+   concurrently:
+   - `GraphBuilder`
+   - `ContractStructurer`
+   - `SignatureVerifier`
+   - `IntentAgent`
+   - `DeadlineAgent`
+   - `ObligationAgent`
+5. **Validate and check coverage.** `GraphValidator` validates the graph, then
+   `GraphReviewerAgent` reports graph issues. Next, these three local checks run
+   concurrently: `CoverageAgent`, `DocumentQualityAgent`, and `SensitiveDataAgent`.
+6. **Review and score each perspective.** `TemplateReviewAgent` checks applicable
+   Indian property deed checklists. For each party perspective, the app then runs
+   `FixerAgent` → `CrossChecker` → `ContractScorer` in sequence. The giver and
+   acceptor passes run one after the other.
+7. **Save the results.** The app saves both party reports, evidence, graph data,
+   classification, government search results, and review activity for the UI.
+
+### Chat flow
+
+Chat is separate from the upload review. For each question, `RetrieverAgent` finds
+relevant contract passages using hybrid lexical and vector search. `GraphRetriever`
+adds graph relations supported by those passages. `AnswerGenerator` answers with
+citations when the retrieved evidence supports it, or falls back to source excerpts
+when it cannot produce a grounded answer.
 
 ### Upload and review agents
 
 | Agent | Purpose and work |
 |---|---|
 | **MasterAgent** | Coordinates the review workflow, supervises agent calls, applies retries, records status and output summaries, and runs independent checks in parallel. |
-| **Ingestion** | Extracts text and page information from the PDF, applies the finalized chunk settings, builds searchable indexes and local embeddings when available, and records indexing status. |
+| **Ingestion** | Extracts PDF text and page information, coordinates indexing, saves searchable chunks and embeddings when enabled, and records processing status. |
 | **DocumentConfigAgent** | Profiles the extracted document and chooses per-contract settings for chunking, embeddings, retrieval, review context, and retries. |
-| **ContractClassifierAgent** | Classifies the document type and likely jurisdiction, with confidence and a supporting quote. |
-| **GovernmentResearchAgent** | Uses the MCP server's Tavily search tool to find related government legal sources after classification; saves results and supplies them as separate context to the review. |
-| **ChunkOptimizer** | Measures the extracted text and recommends chunk size and overlap before search indexes are built. |
+| **ChunkOptimizer** | Measures chunk lengths and recommends chunk size and overlap before indexes are built; the ingestion flow applies the result. |
+| **ContractClassifierAgent** | Classifies the document type and likely jurisdiction, with confidence and a supporting quote. Uses the selected model when available and local keyword rules otherwise. |
+| **GovernmentResearchAgent** | Searches official Indian government legal domains with the shared Tavily search implementation, which is also exposed as an MCP tool. Saves linked results and supplies them as separate context to the review. |
 | **InitialScan** | Reviews every contract passage for material risks. When a model is selected, each review batch returns both the **contract giver** and **contract acceptor** views together. The giver is the party providing the stated goods, services, property, or draft; roles are inferred only from contract wording. Local mode uses the same role-neutral checklist for both views. |
 | **GraphBuilder** | Sends the complete contract text in one request to extract named parties, terms, clauses, duties, dates, amounts, and supported relationships. It verifies returned quotes against page text and records their evidence. Without a usable model result, it builds a conservative local graph without exposing storage chunks as graph entities. |
 | **GraphValidator** | Checks that graph links point to existing nodes and removes invalid, self-referential, or duplicate links. |
@@ -76,14 +100,20 @@ context rather than as a replacement for cited source text.
 
 ### MCP tools
 
-The MCP server exposes two tools: `classify_contract_document` uses local rules
-and returns a likely document type with a supporting quote; `search_official_legal_sources`
-uses Tavily to search current material on official Indian government legal sites.
-The contract review pipeline runs classification first, then passes the search
-results into the review as separate legal context. Results include links and
-publication dates when available; confirm the linked law and commencement date.
-Search queries contain the classified document type and jurisdiction, not the
-contract text. Start the server from the project directory with:
+The stdio MCP server exposes two tools to an external MCP host:
+
+- `classify_contract_document` classifies supplied text with local rules and returns
+  a likely document type, confidence, alternatives, and supporting quote.
+- `search_official_legal_sources` searches Indian government legal domains with
+  Tavily and returns source links, snippets, and publication dates when available.
+
+The in-app review pipeline uses the same classification and search implementations
+directly; it does not connect to its own server over the MCP protocol. After
+classification, the pipeline searches for relevant official material and passes
+the results into the review as separate legal context. The search query contains
+the document type and jurisdiction, not the contract text. Search results are leads:
+check the linked law and commencement date before relying on a rule. Start the MCP
+server from the project directory with:
 
 ```bash
 python -m backend.app.mcp_server
